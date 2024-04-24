@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { EmailExists, LoginForm } from "../../../utils/typeForm";
 import { localSetItem } from "../../../utils/storage";
 import { Epath } from "../../../utils/Epath";
+import logo from "../../../assets/images/logo.png";
+
 import classNames from "classnames";
 
 const Login = () => {
@@ -96,7 +98,7 @@ const Login = () => {
   return (
     <div className="w-full mt-20 flex flex-col items-center">
       <div className={formClass}>
-        <img className="w-20 h-20 mb-4" alt="" src={"avs"} />
+        <img className="w-20 h-20 mb-4" alt="" src={logo} />
         <h2 className="text-center mt-4 mb-6 text-2xl font-semibold">
           Đăng nhập vào Genealogy
         </h2>
