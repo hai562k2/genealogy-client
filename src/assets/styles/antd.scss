@@ -1,0 +1,32 @@
+//-----Spin-----//
+.ant-spin-dot {
+    font-size: 45px !important;
+
+    i {
+        width: 20px !important;
+        height: 20px !important;
+    }
+
+    .ant-spin-dot-item {
+        background-color: rgb(245, 170, 7) !important;
+    }
+}
+
+//-----Table-----//
+.data-project {
+    .ant-table-header {
+        position: sticky !important;
+        top: 0 !important;
+    }
+
+    .ant-table-content {
+        height: 100%;
+    }
+
+}
+
+//-----carousel-----//
+.slick-dots li button {
+    background-color: red !important;
+    /* Change this to the desired color */
+}

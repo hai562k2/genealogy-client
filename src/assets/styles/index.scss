@@ -1,0 +1,30 @@
+@import "./variables.scss";
+@import "./antd.scss";
+@import "./typography.scss";
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: $font-primary;
+}
+
+body,
+div,
+span,
+p {
+    font-size: 14px;
+}
+
+a {
+    text-decoration: none;
+}
+
+//-----SCROLLBAR-----//
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: gray;
+}
