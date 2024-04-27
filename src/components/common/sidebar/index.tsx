@@ -8,6 +8,8 @@ import {
   faCircleArrowLeft,
   faCircleArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { link } from "fs";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const Sidebar = ({
   small,
@@ -21,6 +23,12 @@ const Sidebar = ({
       key: "home",
       link: Epath.HOME,
       label: "Quản lý bài đăng",
+      icon: faChartSimple,
+    },
+    {
+      key: "familyTree",
+      link: Epath.FAMILY_TREE,
+      label: "Cây gia phả",
       icon: faChartSimple,
     },
   ];

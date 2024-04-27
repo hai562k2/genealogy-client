@@ -45,7 +45,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
         <div className="ml-[5px] cursor-pointer icon-bars" onClick={onClick}>
           <FontAwesomeIcon icon={faBars} style={{ fontSize: "22px" }} />
         </div>
-        <h3>Find Jod - Quản lý</h3>
+        <h3>Genealogy</h3>
       </div>
       <Dropdown menu={{ items }} trigger={["click"]} className="mr-[10px]">
         <span className="cursor-pointer font-semibold">

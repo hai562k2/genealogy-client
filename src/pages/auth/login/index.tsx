@@ -108,7 +108,7 @@ const Login = () => {
               <Field
                 name="password"
                 type="password"
-                label="Mật khẩu"
+                label="Vui lòng nhập OTP được gửi đến email của bạn"
                 labelClass="required"
                 autoComplete="none"
                 placeholder="Mật khẩu"

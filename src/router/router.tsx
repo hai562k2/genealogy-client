@@ -7,6 +7,7 @@ import Login from "../pages/auth/login";
 import SuspenseFallback from "../components/atoms/suspenseFallback";
 import { useAppSelector } from "../store/hook";
 import ProjectManager from "../pages/project-manager";
+import { GenealogyTree } from "../pages/family-tree";
 
 const RootRouter = () => {
   const isLoading = useAppSelector((state) => state.spinSlice.value);
@@ -27,6 +28,10 @@ const RootRouter = () => {
         {
           path: Epath.PROFILE,
           element: <Profile />,
+        },
+        {
+          path: Epath.FAMILY_TREE,
+          element: <GenealogyTree />,
         },
       ],
     },
