@@ -22,6 +22,16 @@ const RootRouter = () => {
       ),
       children: [
         {
+          path: ":clanId",
+          // element: <AdminLayout />,
+          children: [
+            {
+              path: "",
+              element: <ProjectManager />,
+            },
+          ],
+        },
+        {
           path: Epath.HOME,
           element: <ProjectManager />,
         },

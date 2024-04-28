@@ -7,4 +7,5 @@ export const Epath = {
   PROFILE: "/profile",
   REGISTER_MONEY: "/register-money",
   FAMILY_TREE: "family-tree",
+  clan: "/clan/:clanId",
 };

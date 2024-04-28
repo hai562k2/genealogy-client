@@ -8,7 +8,9 @@ export const GenealogyTree = () => {
       pids: [2],
       name: "Amber McKenzie",
       gender: "female",
-      img: ["https://cdn.balkan.app/shared/2.jpg"],
+      img: [
+        "http://localhost:3000/api/v1/files/images%2F7adfc1ffd279c711ed5bb.png",
+      ],
     },
     {
       id: 2,

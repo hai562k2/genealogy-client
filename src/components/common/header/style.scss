@@ -1,6 +1,25 @@
 @media screen and (min-width: 911px) {
-    .icon-bars {
-        visibility: hidden;
-        display: none;
-    }
+  .icon-bars {
+    visibility: hidden;
+    display: none;
+  }
+}
+
+.clan-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.clan-item {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.clan-item:hover {
+  background-color: #1890ff;
+  color: #fff;
 }
