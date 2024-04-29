@@ -9,7 +9,15 @@ interface Node {
   name: string;
   gender: string;
   img?: string[];
-  des?: string;
+  birthday?: Date;
+  lunarBirthday?: Date;
+  country?: string;
+  phone?: string;
+  job?: string;
+  workAddress?: string;
+  description?: string;
+  deadDay?: Date;
+  lunarDeadDay?: Date;
 }
 
 interface Props {

@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MyFamilyTree from "../family-tree/MyFamilyTree";
+import { useAppDispatch } from "../../store/hook";
+import { getMemberByClanAsync } from "../../store/features/clanSlice";
+import { useParams } from "react-router-dom";
 
 export const GenealogyTree = () => {
+  const dispatch = useAppDispatch();
+  const { clanId } = useParams();
+  const [resultMemeberClan, setResultMemberClan] = useState<Node | null>(null);
+
+  useEffect(() => {
+    console.log(clanId);
+    dispatch(getMemberByClanAsync(Number(clanId)));
+  }, [clanId]);
+
   const nodes = [
     {
       id: 1,

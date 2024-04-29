@@ -8,6 +8,7 @@ import SuspenseFallback from "../components/atoms/suspenseFallback";
 import { useAppSelector } from "../store/hook";
 import ProjectManager from "../pages/project-manager";
 import { GenealogyTree } from "../pages/family-tree";
+import ClanInformation from "../pages/genealogy-information";
 
 const RootRouter = () => {
   const isLoading = useAppSelector((state) => state.spinSlice.value);
@@ -22,12 +23,16 @@ const RootRouter = () => {
       ),
       children: [
         {
-          path: ":clanId",
-          // element: <AdminLayout />,
+          path: Epath.CLAN,
+          element: <ClanInformation />,
           children: [
             {
               path: "",
               element: <ProjectManager />,
+            },
+            {
+              path: Epath.CLAN_INFORMATION,
+              element: <ClanInformation />,
             },
           ],
         },

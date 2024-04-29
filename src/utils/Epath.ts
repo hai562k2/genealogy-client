@@ -6,6 +6,7 @@ export const Epath = {
   HOME: "/",
   PROFILE: "/profile",
   REGISTER_MONEY: "/register-money",
-  FAMILY_TREE: "family-tree",
-  clan: "/clan/:clanId",
+  FAMILY_TREE: "/family-tree/:clanId",
+  CLAN: "/clan/:clanId",
+  CLAN_INFORMATION: "/clan/:clanId/information",
 };

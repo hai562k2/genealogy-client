@@ -1,6 +1,6 @@
 import React from "react";
 import { Epath } from "../../../utils/Epath";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { link } from "fs";
 import { icon } from "@fortawesome/fontawesome-svg-core";
+import { useAppSelector } from "../../../store/hook";
 
 const Sidebar = ({
   small,
@@ -18,6 +19,16 @@ const Sidebar = ({
   small: boolean;
   callBack?: (type: string) => void;
 }) => {
+  const clans = useAppSelector((state) => state.clanSlice.data);
+  const { clanId } = useParams();
+  const location = useLocation();
+  const handleLink = () => {
+    if (clans.length <= 0) {
+      return Epath.HOME;
+    } else if (clanId === undefined) {
+      return `family-tree/${clans[0].id}`;
+    } else return location.pathname;
+  };
   const items = [
     {
       key: "home",
@@ -27,8 +38,14 @@ const Sidebar = ({
     },
     {
       key: "familyTree",
-      link: Epath.FAMILY_TREE,
+      link: handleLink(),
       label: "Cây gia phả",
+      icon: faChartSimple,
+    },
+    {
+      key: "clanInformation",
+      link: Epath.CLAN,
+      label: "Dòng họ",
       icon: faChartSimple,
     },
   ];
