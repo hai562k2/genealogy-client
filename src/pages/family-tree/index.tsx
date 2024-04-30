@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import MyFamilyTree from "../family-tree/MyFamilyTree";
-import { useAppDispatch } from "../../store/hook";
-import { getMemberByClanAsync } from "../../store/features/clanSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { useParams } from "react-router-dom";
+import { getMemberByClanAsync } from "../../store/features/memberSlice";
 
 export const GenealogyTree = () => {
   const dispatch = useAppDispatch();
   const { clanId } = useParams();
+  const members = useAppSelector((state) => state.memberSlice.data);
   const [resultMemeberClan, setResultMemberClan] = useState<Node | null>(null);
 
   useEffect(() => {
-    console.log(clanId);
     dispatch(getMemberByClanAsync(Number(clanId)));
   }, [clanId]);
+  console.log(members);
 
   const nodes = [
     {
       id: 1,
       pids: [2],
-      name: "Amber McKenzie",
+      name: "abc",
       gender: "female",
       img: [
         "http://localhost:3000/api/v1/files/images%2F7adfc1ffd279c711ed5bb.png",
@@ -60,6 +61,17 @@ export const GenealogyTree = () => {
       des: "abc",
     },
   ];
+
+  const nodes1 = members.map((item) => ({
+    id: item.id,
+    pids: item.partnerId || undefined,
+    mid: item.motherId || undefined,
+    fid: item.fatherId || undefined,
+    name: item.name || "",
+    gender: item.gender || "",
+    img: item.image || [],
+  }));
+
   return (
     <div>
       <div>

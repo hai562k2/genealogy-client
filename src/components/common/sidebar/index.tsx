@@ -8,8 +8,7 @@ import {
   faCircleArrowLeft,
   faCircleArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { link } from "fs";
-import { icon } from "@fortawesome/fontawesome-svg-core";
+
 import { useAppSelector } from "../../../store/hook";
 
 const Sidebar = ({

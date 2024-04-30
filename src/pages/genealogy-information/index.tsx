@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 
 const ClanInformation = () => {
   const { clanId } = useParams();
-  console.log(clanId);
 
   return (
     <div>

@@ -21,14 +21,6 @@ export interface IFilterClan {
   id?: number | null;
 }
 
-export interface IFilterMember {
-  page?: number;
-  limit?: number;
-  keyword?: string;
-  id?: number | null;
-  clanId?: number | null;
-}
-
 export const getClanAsync = createAsyncThunk(
   "clan/get-clans",
   async (dataFilter: IFilterClan, thunkAPI) => {
@@ -49,32 +41,6 @@ const clanSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(getClanAsync.fulfilled, (state, action) => {
-      state.data = action.payload.data.items;
-    });
-  },
-});
-
-export const getMemberByClanAsync = createAsyncThunk(
-  "member/clan",
-  async (clanId: number, thunkAPI) => {
-    try {
-      const response = await axiosClient.get(
-        `users?page=1&limit=1000&clanId=${clanId ?? 0}`
-      );
-      console.log(response.data);
-      return response.data;
-    } catch (error: any) {
-      return thunkAPI.rejectWithValue(error.response.data);
-    }
-  }
-);
-
-const memberSlice = createSlice({
-  name: "users",
-  initialState: initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder.addCase(getMemberByClanAsync.fulfilled, (state, action) => {
       state.data = action.payload.data.items;
     });
   },
