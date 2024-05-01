@@ -1,5 +1,5 @@
-import { Dropdown, MenuProps } from "antd";
-import React, { useEffect } from "react";
+import { Button, Dropdown, MenuProps } from "antd";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Epath } from "../../../utils/Epath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +9,9 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { clearAuth } from "../../../store/features/authSlice";
 import { localClearStorage, localGetItem } from "../../../utils/storage";
 import { getClanAsync } from "../../../store/features/clanSlice";
+import IconPlus from "../../icon/IconPlus";
+import DefaultText from "../../Text/DefaultText";
+import { PlusOutlined } from "@ant-design/icons";
 
 const Header = ({ onClick }: { onClick: () => void }) => {
   const navigate = useNavigate();
@@ -16,6 +19,28 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   const dispatch = useAppDispatch();
   const clans = useAppSelector((state) => state.clanSlice.data);
   const user = JSON.parse(localGetItem("user") || "null");
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+
+  interface FormValues {
+    title: string;
+    area: number;
+    // Thêm các trường dữ liệu khác của form vào đây nếu cần
+  }
+
+  const handleFormSubmit = (values: FormValues) => {
+    console.log("Form submitted with values:", values);
+    // Add your form submission logic here
+    setModalVisible(false);
+  };
 
   const logOut = () => {
     localClearStorage();
@@ -82,6 +107,20 @@ const Header = ({ onClick }: { onClick: () => void }) => {
           </div>
         ))}
       </div>
+      <div>
+        <Button
+          style={{
+            border: "none",
+            boxShadow: "none",
+            padding: 0,
+            backgroundColor: "transparent",
+          }}
+          icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+        >
+          THÊM DÒNG HỌ
+        </Button>
+      </div>
+
       <Dropdown menu={{ items }} trigger={["click"]} className="mr-[10px]">
         <span className="cursor-pointer font-semibold">
           {user?.name} <FontAwesomeIcon icon={faCaretDown} />
