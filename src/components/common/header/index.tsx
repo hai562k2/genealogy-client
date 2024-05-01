@@ -1,4 +1,4 @@
-import { Button, Dropdown, MenuProps } from "antd";
+import { Button, Dropdown, Menu, Modal, Form, Input, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Epath } from "../../../utils/Epath";
@@ -11,7 +11,8 @@ import { localClearStorage, localGetItem } from "../../../utils/storage";
 import { getClanAsync } from "../../../store/features/clanSlice";
 import IconPlus from "../../icon/IconPlus";
 import DefaultText from "../../Text/DefaultText";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { FormAddClan } from "../../../utils/typeForm";
 
 const Header = ({ onClick }: { onClick: () => void }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const handleButtonClick = () => {
+  const handleAddClick = () => {
     setModalVisible(true);
   };
 
@@ -30,13 +31,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     setModalVisible(false);
   };
 
-  interface FormValues {
-    title: string;
-    area: number;
-    // Thêm các trường dữ liệu khác của form vào đây nếu cần
-  }
-
-  const handleFormSubmit = (values: FormValues) => {
+  const handleFormSubmit = (values: FormAddClan) => {
     console.log("Form submitted with values:", values);
     // Add your form submission logic here
     setModalVisible(false);
@@ -48,22 +43,16 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     navigate(Epath.LOGIN);
   };
 
-  const items: MenuProps["items"] = [
+  const items = [
     {
-      key: 1,
-      label: (
-        <p className="text-[13px]" onClick={() => navigate(Epath.PROFILE)}>
-          Cá nhân
-        </p>
-      ),
+      key: "profile",
+      label: "Cá nhân",
+      onClick: () => navigate(Epath.PROFILE),
     },
     {
-      key: 2,
-      label: (
-        <p className="text-[13px]" onClick={logOut}>
-          Đăng xuất
-        </p>
-      ),
+      key: "logout",
+      label: "Đăng xuất",
+      onClick: logOut,
     },
   ];
 
@@ -107,20 +96,77 @@ const Header = ({ onClick }: { onClick: () => void }) => {
           </div>
         ))}
       </div>
-      <div>
-        <Button
-          style={{
-            border: "none",
-            boxShadow: "none",
-            padding: 0,
-            backgroundColor: "transparent",
-          }}
-          icon={<PlusOutlined style={{ fontSize: "16px" }} />}
-        >
-          THÊM DÒNG HỌ
-        </Button>
-      </div>
-
+      <Button
+        style={{
+          border: "none",
+          boxShadow: "none",
+          padding: 0,
+          backgroundColor: "transparent",
+        }}
+        icon={<PlusOutlined style={{ fontSize: "16px" }} />}
+        onClick={handleAddClick}
+      >
+        THÊM DÒNG HỌ
+      </Button>
+      <Modal
+        open={modalVisible}
+        onCancel={handleModalClose}
+        footer={null}
+        centered
+        style={{
+          backgroundColor: "#ffffff",
+          borderRadius: 8,
+          boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.1)",
+          padding: 24,
+          width: "80%",
+        }}
+      >
+        <Form onFinish={handleFormSubmit}>
+          <Form.Item
+            label="Tên dòng họ"
+            name="name"
+            rules={[{ required: true, message: "Vui lòng nhập tên dòng họ" }]}
+            labelCol={{ span: 24 }} // Đặt labelCol span thành 24 để label chiếm toàn bộ width
+            wrapperCol={{ span: 24 }} // Đặt wrapperCol span thành 24 để input chiếm toàn bộ width
+            style={{ color: "#333333", marginBottom: "20px" }} // Thêm margin bottom để tách các Form.Item
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Thông tin"
+            name="information"
+            rules={[
+              { required: true, message: "Vui lòng nhập thông tin dòng họ" },
+            ]}
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            style={{ color: "#333333", marginBottom: "20px" }}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Ảnh"
+            name="image"
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            style={{ color: "#333333", marginBottom: "20px" }}
+          >
+            <Upload>
+              <Button
+                icon={<UploadOutlined />}
+                style={{ backgroundColor: "#f0f2f5", color: "#333333" }}
+              >
+                Tải ảnh lên
+              </Button>
+            </Upload>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
       <Dropdown menu={{ items }} trigger={["click"]} className="mr-[10px]">
         <span className="cursor-pointer font-semibold">
           {user?.name} <FontAwesomeIcon icon={faCaretDown} />
