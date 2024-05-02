@@ -5,21 +5,11 @@ import { useParams } from "react-router-dom";
 import { getMemberByClanAsync } from "../../store/features/memberSlice";
 
 export const GenealogyTree = () => {
-  const dispatch = useAppDispatch();
-  const { clanId } = useParams();
-  const members = useAppSelector((state) => state.memberSlice.data);
-  const [resultMemeberClan, setResultMemberClan] = useState<Node | null>(null);
-
-  useEffect(() => {
-    dispatch(getMemberByClanAsync(Number(clanId)));
-  }, [clanId]);
-  console.log(members);
-
-  const nodes = [
+  const nodes1 = [
     {
       id: 1,
       pids: [2],
-      name: "abc",
+      name: "John",
       gender: "female",
       img: [
         "http://localhost:3000/api/v1/files/images%2F7adfc1ffd279c711ed5bb.png",
@@ -62,15 +52,57 @@ export const GenealogyTree = () => {
     },
   ];
 
-  const nodes1 = members.map((item) => ({
-    id: item.id,
-    pids: item.partnerId || undefined,
-    mid: item.motherId || undefined,
-    fid: item.fatherId || undefined,
-    name: item.name || "",
-    gender: item.gender || "",
-    img: item.image || [],
-  }));
+  const nodes2 = [
+    {
+      id: 1,
+      pids: [2],
+      name: "John",
+      gender: "female",
+      img: [
+        "http://localhost:3000/api/v1/files/images%2F7adfc1ffd279c711ed5bb.png",
+      ],
+    },
+    {
+      id: 2,
+      pids: [1],
+      name: "Ava Field",
+      gender: "male",
+      img: ["https://cdn.balkan.app/shared/m30/5.jpg"],
+    },
+    {
+      id: 3,
+      mid: 1,
+      fid: 2,
+      name: "Peter Stevens",
+      gender: "male",
+      img: [
+        "http://222.252.23.157:62399/api/v1/files/3b021026e9b0801d65676.png",
+      ],
+    },
+  ];
+
+  const dispatch = useAppDispatch();
+  const { clanId } = useParams();
+  const members = useAppSelector((state) => state.memberSlice.data);
+  const [resultMemeberClan, setResultMemberClan] = useState<Node | null>(null);
+  const [nodes, setNodes] = useState<any>(nodes1);
+
+  useEffect(() => {
+    dispatch(getMemberByClanAsync(Number(clanId)));
+    const nodes = members.map((item) => ({
+      id: item?.id,
+      pids: item?.partnerId,
+      mid: item?.motherId || undefined,
+      fid: item?.fatherId || undefined,
+      name: item?.name,
+      gender: item?.gender,
+      img: item?.image,
+    }));
+    if (Number(clanId) === 1) setNodes(nodes1);
+    else setNodes(nodes2);
+  }, [clanId]);
+
+  console.log("nodes", nodes);
 
   return (
     <div>

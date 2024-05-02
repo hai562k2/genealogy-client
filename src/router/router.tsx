@@ -30,10 +30,6 @@ const RootRouter = () => {
               path: "",
               element: <ProjectManager />,
             },
-            {
-              path: Epath.CLAN_INFORMATION,
-              element: <ClanInformation />,
-            },
           ],
         },
         {
@@ -47,6 +43,10 @@ const RootRouter = () => {
         {
           path: Epath.FAMILY_TREE,
           element: <GenealogyTree />,
+        },
+        {
+          path: Epath.CLAN_INFORMATION,
+          element: <ClanInformation />,
         },
       ],
     },

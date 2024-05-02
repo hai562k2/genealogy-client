@@ -43,7 +43,7 @@ const Sidebar = ({
     },
     {
       key: "clanInformation",
-      link: Epath.CLAN,
+      link: Epath.PROFILE,
       label: "Dòng họ",
       icon: faChartSimple,
     },

@@ -9,8 +9,6 @@ import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { clearAuth } from "../../../store/features/authSlice";
 import { localClearStorage, localGetItem } from "../../../utils/storage";
 import { getClanAsync } from "../../../store/features/clanSlice";
-import IconPlus from "../../icon/IconPlus";
-import DefaultText from "../../Text/DefaultText";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { FormAddClan } from "../../../utils/typeForm";
 
