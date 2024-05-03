@@ -47,6 +47,12 @@ const Sidebar = ({
       label: "Dòng họ",
       icon: faChartSimple,
     },
+    {
+      key: "clanInformation",
+      link: Epath.MEMBERS,
+      label: "Quản lý thành viên",
+      icon: faChartSimple,
+    },
   ];
 
   const handleClick = () =>

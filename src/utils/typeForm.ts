@@ -8,6 +8,7 @@ export type EmailExists = {
 };
 
 export type FormAddClan = {
-  title: string;
-  area: string;
+  name: string;
+  information: string;
+  image?: string[];
 };

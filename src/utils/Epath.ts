@@ -9,4 +9,5 @@ export const Epath = {
   FAMILY_TREE: "/family-tree/:clanId",
   CLAN: "/clan/:clanId",
   CLAN_INFORMATION: "/clan/:clanId/information",
+  MEMBERS: "/member/:clanId",
 };

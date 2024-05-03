@@ -43,8 +43,6 @@ export const GenealogyTree = () => {
     }
   }, [members]); // Cập nhật nodes khi members thay đổi
 
-  console.log("nodes", nodes);
-
   return (
     <div>
       <div>

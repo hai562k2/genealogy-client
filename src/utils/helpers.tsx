@@ -9,3 +9,13 @@ export async function uploadFile(data: File[]) {
     headers: { "Content-Type": "multipart/form-data" },
   });
 }
+
+export const uploadApiManagement = {
+  uploadImage(file: File) {
+    const formData = new FormData();
+    formData.append("files", file);
+    return axiosClient.post("files/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  },
+};

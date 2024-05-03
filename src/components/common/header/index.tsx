@@ -1,5 +1,5 @@
 import { Button, Dropdown, Menu, Modal, Form, Input, Upload } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Epath } from "../../../utils/Epath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,9 +8,10 @@ import "./style.scss";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { clearAuth } from "../../../store/features/authSlice";
 import { localClearStorage, localGetItem } from "../../../utils/storage";
-import { getClanAsync } from "../../../store/features/clanSlice";
+import { createClan, getClanAsync } from "../../../store/features/clanSlice";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { FormAddClan } from "../../../utils/typeForm";
+import { uploadApiManagement } from "../../../utils/helpers";
 
 const Header = ({ onClick }: { onClick: () => void }) => {
   const navigate = useNavigate();
@@ -30,9 +31,15 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   };
 
   const handleFormSubmit = (values: FormAddClan) => {
-    console.log("Form submitted with values:", values);
-    // Add your form submission logic here
-    setModalVisible(false);
+    setTimeout(() => {
+      const params = {
+        name: values.name,
+        information: values.information,
+        image: createStringURLImage,
+      };
+      dispatch(createClan(params));
+      setModalVisible(false);
+    }, 2000); // Chờ 1.2 giây trước khi gửi dữ liệu
   };
 
   const logOut = () => {
@@ -40,6 +47,47 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     dispatch(clearAuth());
     navigate(Epath.LOGIN);
   };
+
+  const [fileInfoList, setFileInfoList] = useState<
+    { file: string; type: string; name?: string }[]
+  >([]);
+  const [errorFileUpload, setErrorFileUpload] = useState<boolean>(false);
+  const [createStringURLImage, setCreateStringURLImage] = useState<any>([]);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [initImg, setInitImg] = useState<any>(null);
+
+  const handelUpload = () => {
+    if (inputRef.current) {
+      inputRef.current.value = "";
+      inputRef.current.click();
+    }
+  };
+
+  const uploadImage = (event: any) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      const fileType = selectedFile.type;
+      if (fileType.startsWith("image/")) {
+        setErrorFileUpload(false);
+        const initImg = URL.createObjectURL(selectedFile);
+        setInitImg(initImg);
+        const fileInfo = {
+          file: fileType.startsWith("image/") ? initImg : selectedFile.name,
+          type: fileType,
+        };
+        uploadApiManagement.uploadImage(selectedFile).then((res) => {
+          setCreateStringURLImage([`${res.data.data[0].path}`]);
+        });
+        setFileInfoList((prevArray) => [...prevArray, fileInfo]);
+      } else setErrorFileUpload(true);
+      setTimeout(() => setErrorFileUpload(false), 1200);
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log("string", createStringURLImage);
+  // }, [createStringURLImage]);
 
   const items = [
     {
@@ -149,14 +197,31 @@ const Header = ({ onClick }: { onClick: () => void }) => {
             wrapperCol={{ span: 24 }}
             style={{ color: "#333333", marginBottom: "20px" }}
           >
-            <Upload>
-              <Button
-                icon={<UploadOutlined />}
-                style={{ backgroundColor: "#f0f2f5", color: "#333333" }}
-              >
-                Tải ảnh lên
-              </Button>
-            </Upload>
+            <Button
+              icon={<UploadOutlined />}
+              style={{ backgroundColor: "#f0f2f5", color: "#333333" }}
+              onClick={handelUpload}
+            >
+              Tải ảnh lên
+            </Button>
+
+            <input
+              ref={inputRef}
+              id="file_upload"
+              name="file_upload"
+              type="file"
+              className="sr-only"
+              onChange={uploadImage}
+            />
+            {initImg && (
+              <>
+                <img
+                  src={initImg}
+                  alt=""
+                  className="h-[88px] w-[88px] rounded-lg object-cover"
+                />
+              </>
+            )}
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">

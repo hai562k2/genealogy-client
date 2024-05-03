@@ -23,7 +23,6 @@ export const exists = createAsyncThunk(
       return respone.data;
     } catch (error: any) {
       thunkApi.dispatch(unLoading());
-      console.log(error);
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
@@ -36,11 +35,9 @@ export const login = createAsyncThunk(
     try {
       const respone = await axiosClient.post("/auth/email/login", params);
       thunkApi.dispatch(unLoading());
-      console.log(respone.data);
       return respone.data;
     } catch (error: any) {
       thunkApi.dispatch(unLoading());
-      console.log(error);
       return thunkApi.rejectWithValue(error.response.data);
     }
   }
