@@ -21,11 +21,29 @@ const Sidebar = ({
   const clans = useAppSelector((state) => state.clanSlice.data);
   const { clanId } = useParams();
   const location = useLocation();
+
   const handleLink = () => {
+    console.log(location.pathname);
     if (clans.length <= 0) {
       return Epath.HOME;
     } else if (clanId === undefined) {
       return `family-tree/${clans[0].id}`;
+    } else return location.pathname;
+  };
+
+  const handleLinkMember = () => {
+    if (clans.length <= 0) {
+      return Epath.HOME;
+    } else if (clanId === undefined) {
+      return `member/${clans[0].id}`;
+    } else return location.pathname;
+  };
+
+  const handleLinkInformation = () => {
+    if (clans.length <= 0) {
+      return Epath.HOME;
+    } else if (clanId === undefined) {
+      return `information/${clans[0].id}`;
     } else return location.pathname;
   };
   const items = [
@@ -43,14 +61,14 @@ const Sidebar = ({
     },
     {
       key: "clanInformation",
-      link: Epath.PROFILE,
+      link: handleLinkInformation(),
       label: "Dòng họ",
       icon: faChartSimple,
     },
     {
       key: "clanInformation",
-      link: Epath.MEMBERS,
-      label: "Quản lý thành viên",
+      link: handleLinkMember(),
+      label: "Thành viên",
       icon: faChartSimple,
     },
   ];

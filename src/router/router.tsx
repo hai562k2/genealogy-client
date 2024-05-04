@@ -9,6 +9,7 @@ import { useAppSelector } from "../store/hook";
 import ProjectManager from "../pages/project-manager";
 import { GenealogyTree } from "../pages/family-tree";
 import ClanInformation from "../pages/genealogy-information";
+import Member from "../pages/members";
 
 const RootRouter = () => {
   const isLoading = useAppSelector((state) => state.spinSlice.value);
@@ -47,6 +48,10 @@ const RootRouter = () => {
         {
           path: Epath.CLAN_INFORMATION,
           element: <ClanInformation />,
+        },
+        {
+          path: Epath.MEMBERS,
+          element: <Member />,
         },
       ],
     },

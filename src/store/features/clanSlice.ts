@@ -6,6 +6,15 @@ import { loading, unLoading } from "./spinSlice";
 export type TItemClan = {
   id: number;
   name: string;
+  information: string;
+  image: string[];
+};
+
+type TClanById = {
+  data: TItemClan;
+};
+const initialStateById: TClanById = {
+  data: { id: 0, information: "", name: "", image: [] },
 };
 
 type TClan = {
@@ -47,6 +56,31 @@ const clanSlice = createSlice({
     });
   },
 });
+
+export const getClanByIdAsync = createAsyncThunk(
+  "clan/get-clan",
+  async (clanId: number, thunkAPI) => {
+    try {
+      const response = await axiosClient.get(`clan/${clanId}`);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const clanByIdSlice = createSlice({
+  name: "clan/:id",
+  initialState: initialStateById,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getClanByIdAsync.fulfilled, (state, action) => {
+      state.data = action.payload.data;
+    });
+  },
+});
+
+export const clanByIdReducer = clanByIdSlice.reducer;
 
 export const createClan = createAsyncThunk(
   "clan/create",

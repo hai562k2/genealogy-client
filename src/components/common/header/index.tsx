@@ -118,8 +118,10 @@ const Header = ({ onClick }: { onClick: () => void }) => {
       navigate(`/family-tree/${id}`);
     } else if (location.pathname.includes("clan")) {
       navigate(`/clan/${id}`);
-    } else if (location.pathname.includes("event")) {
-      navigate(`/event/${id}`);
+    } else if (location.pathname.includes("member")) {
+      navigate(`/member/${id}`);
+    } else if (location.pathname.includes("information")) {
+      navigate(`/information/${id}`);
     }
   };
 

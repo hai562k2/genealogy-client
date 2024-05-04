@@ -39,10 +39,12 @@ export interface IFilterMember {
 
 export const getMemberByClanAsync = createAsyncThunk(
   "member/clan",
-  async (clanId: number, thunkAPI) => {
+  async (filter: IFilterMember, thunkAPI) => {
     try {
       const response = await axiosClient.get(
-        `users?page=1&limit=1000&clanId=${clanId ?? 0}`
+        `users?page=${filter.page}&limit=${filter.limit}&clanId=${
+          filter.clanId ?? 0
+        }&keyword=${filter.keyword ?? ""}`
       );
       return response.data;
     } catch (error: any) {

@@ -12,7 +12,9 @@ export const GenealogyTree = () => {
   const members = useAppSelector((state) => state.memberSlice.data);
 
   useEffect(() => {
-    dispatch(getMemberByClanAsync(Number(clanId)));
+    const filter = { clanId: Number(clanId) };
+    // Gọi action để lấy thành viên theo clanId
+    dispatch(getMemberByClanAsync(filter));
   }, [clanId]);
 
   useEffect(() => {
