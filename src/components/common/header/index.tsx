@@ -18,12 +18,16 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const clans = useAppSelector((state) => state.clanSlice.data);
+  const loading = useAppSelector((state) => state.spinSlice);
   const user = JSON.parse(localGetItem("user") || "null");
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [isCallbackApi, setIsCallBackApi] = useState<boolean>(false);
 
   const handleAddClick = () => {
     setModalVisible(true);
+    form.resetFields();
+    setInitImg(null);
   };
 
   const handleModalClose = () => {
@@ -38,6 +42,8 @@ const Header = ({ onClick }: { onClick: () => void }) => {
         image: createStringURLImage,
       };
       dispatch(createClan(params));
+      form.resetFields();
+      setInitImg(null);
       setModalVisible(false);
     }, 2000); // Chờ 1.2 giây trước khi gửi dữ liệu
   };
@@ -89,6 +95,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   //   console.log("string", createStringURLImage);
   // }, [createStringURLImage]);
 
+  const [form] = Form.useForm();
   const items = [
     {
       key: "profile",
@@ -104,7 +111,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
 
   useEffect(() => {
     dispatch(getClanAsync({}));
-  }, []);
+  }, [loading]);
 
   // Set default navigate to the first clan
   useEffect(() => {
@@ -169,7 +176,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
           width: "80%",
         }}
       >
-        <Form onFinish={handleFormSubmit}>
+        <Form onFinish={handleFormSubmit} form={form}>
           <Form.Item
             label="Tên dòng họ"
             name="name"

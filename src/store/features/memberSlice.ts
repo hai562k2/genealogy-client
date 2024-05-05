@@ -21,12 +21,19 @@ export type TItemMember = {
   lunarDeadDay: Date | null;
 };
 
-type TMember = {
-  data: TItemMember[];
+export type TMemberItem = {
+  items: TItemMember[];
+  page: number;
+  limit: number;
+  total: number;
+};
+
+export type TMember = {
+  data: TMemberItem;
 };
 
 const initialState: TMember = {
-  data: [],
+  data: { items: [], page: 1, limit: 10, total: 0 },
 };
 
 export interface IFilterMember {
@@ -59,7 +66,7 @@ const memberSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(getMemberByClanAsync.fulfilled, (state, action) => {
-      state.data = action.payload.data.items;
+      state.data = action.payload.data;
     });
   },
 });

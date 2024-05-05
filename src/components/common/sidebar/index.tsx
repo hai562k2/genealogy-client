@@ -28,7 +28,7 @@ const Sidebar = ({
       return Epath.HOME;
     } else if (clanId === undefined) {
       return `family-tree/${clans[0].id}`;
-    } else return location.pathname;
+    } else return `family-tree/${clanId}`;
   };
 
   const handleLinkMember = () => {
@@ -36,7 +36,7 @@ const Sidebar = ({
       return Epath.HOME;
     } else if (clanId === undefined) {
       return `member/${clans[0].id}`;
-    } else return location.pathname;
+    } else return `member/${clanId}`;
   };
 
   const handleLinkInformation = () => {
@@ -44,7 +44,7 @@ const Sidebar = ({
       return Epath.HOME;
     } else if (clanId === undefined) {
       return `information/${clans[0].id}`;
-    } else return location.pathname;
+    } else return `information/${clanId}`;
   };
   const items = [
     {
@@ -53,6 +53,7 @@ const Sidebar = ({
       label: "Quản lý bài đăng",
       icon: faChartSimple,
     },
+
     {
       key: "familyTree",
       link: handleLink(),
@@ -66,7 +67,7 @@ const Sidebar = ({
       icon: faChartSimple,
     },
     {
-      key: "clanInformation",
+      key: "clanMember",
       link: handleLinkMember(),
       label: "Thành viên",
       icon: faChartSimple,
@@ -86,31 +87,33 @@ const Sidebar = ({
         style={{ height: "calc(100vh - 52px)", overflow: "hidden" }}
       >
         {items.map((item) => (
-          <NavLink
-            key={item.key}
-            to={item.link}
-            className={({ isActive }) =>
-              isActive
-                ? "text-white font-semibold bg-active-link"
-                : "text-no-active hover:bg-active-link hover:text-white hover:font-semibold"
-            }
-            style={{
-              height: "36px",
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-              boxSizing: "border-box",
-            }}
-          >
-            <div
-              className={`flex items-center w-full gap-[12px] text-[13px]
-                            ${small ? "justify-center" : "pl-2"}`}
-              style={{ whiteSpace: "nowrap" }}
+          <>
+            <NavLink
+              key={item.key}
+              to={item.link}
+              className={({ isActive }) =>
+                isActive
+                  ? "text-white font-semibold bg-active-link"
+                  : "text-no-active hover:bg-active-link hover:text-white hover:font-semibold"
+              }
+              style={{
+                height: "36px",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                boxSizing: "border-box",
+              }}
             >
-              <FontAwesomeIcon icon={item.icon} />
-              {!small && item.label}
-            </div>
-          </NavLink>
+              <div
+                className={`flex items-center w-full gap-[12px] text-[13px]
+                            ${small ? "justify-center" : "pl-2"}`}
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <FontAwesomeIcon icon={item.icon} />
+                {!small && item.label}
+              </div>
+            </NavLink>
+          </>
         ))}
       </div>
       <div className="w-full relative bottom-[50px] flex justify-center">

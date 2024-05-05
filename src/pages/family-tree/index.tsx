@@ -9,23 +9,24 @@ export const GenealogyTree = () => {
 
   const dispatch = useAppDispatch();
   const { clanId } = useParams();
-  const members = useAppSelector((state) => state.memberSlice.data);
+  const members = useAppSelector((state) => state.memberSlice);
 
   useEffect(() => {
-    const filter = { clanId: Number(clanId) };
-    // Gọi action để lấy thành viên theo clanId
+    const filter = { clanId: Number(clanId), page: 1, limit: 1000 };
+
     dispatch(getMemberByClanAsync(filter));
   }, [clanId]);
 
   useEffect(() => {
-    if (members.length !== 0) {
-      const updatedNodes = members.map((item) => ({
+    console.log(members);
+    if (members.data.items.length !== 0) {
+      const updatedNodes = members.data.items.map((item) => ({
         id: item?.id,
         pids: item?.partnerId ?? [],
-        mid: members.find((member) => member.id == item.motherId)
+        mid: members.data.items.find((member) => member.id == item.motherId)
           ? item.motherId
           : null,
-        fid: members.find((member) => member.id == item.motherId)
+        fid: members.data.items.find((member) => member.id == item.motherId)
           ? item.fatherId
           : null,
         name: item?.name ?? null,
@@ -43,7 +44,7 @@ export const GenealogyTree = () => {
       }));
       setNodes(updatedNodes);
     }
-  }, [members]); // Cập nhật nodes khi members thay đổi
+  }, [members.data.items]); // Cập nhật nodes khi members thay đổi
 
   return (
     <div>
