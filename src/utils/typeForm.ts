@@ -3,6 +3,11 @@ export type LoginForm = {
   password: string;
 };
 
+export type RegisterForm = {
+  email: string;
+  name: string;
+};
+
 export type EmailExists = {
   email: string;
 };

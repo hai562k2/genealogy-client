@@ -3,9 +3,9 @@ import { FormProvider, useForm } from "react-hook-form";
 import Field from "../../../components/common/input";
 import { Button, message } from "antd";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
-import { exists, login } from "../../../store/features/authSlice";
+import { exists, login, register } from "../../../store/features/authSlice";
 import { useNavigate } from "react-router-dom";
-import { EmailExists, LoginForm } from "../../../utils/typeForm";
+import { EmailExists, LoginForm, RegisterForm } from "../../../utils/typeForm";
 import { localSetItem } from "../../../utils/storage";
 import { Epath } from "../../../utils/Epath";
 import logo from "../../../assets/images/logo.png";
@@ -23,8 +23,22 @@ const Login = () => {
     reValidateMode: "onChange",
   });
 
+  const methodsRegister = useForm<RegisterForm>({
+    mode: "onSubmit",
+    criteriaMode: "firstError",
+    reValidateMode: "onChange",
+  });
+
   const [showOTPForm, setShowOTPForm] = useState<boolean>(false);
+  const [showRegisterForm, setShowRegisterForm] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
+
+  useEffect(() => {
+    if (error) {
+      message.open({ type: "error", content: error.message, duration: 2 });
+    }
+  }, [error]);
+
   const onExists = (value: EmailExists) => {
     const params = {
       email: value.email,
@@ -56,7 +70,59 @@ const Login = () => {
       email,
       password: value.password,
     };
-    dispatch(login(params));
+    dispatch(login(params))
+      .unwrap()
+      .then((response) => {
+        if (response.message && response.message.email === "EA0001") {
+          message.open({
+            type: "error",
+            content: "Email không đúng định dạng",
+          });
+        } else if (response.message && response.message.email === "EA0002") {
+          message.open({ type: "error", content: "Email không tồn tại" });
+        } else if (response.message && response.message.password === "EA0003") {
+          message.open({ type: "error", content: "Có lỗi khi gửi OTP" });
+        } else if (response.data) {
+          setShowOTPForm(true);
+        }
+      })
+      .catch(() => {
+        message.open({ type: "error", content: "Mật khẩu không đúng" });
+      });
+  };
+
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userName, setUserName] = useState<string>("");
+
+  const onRegister = () => {
+    const params = {
+      email: userEmail, // Đảm bảo có trường email
+      name: userName,
+    };
+    dispatch(register(params))
+      .unwrap()
+      .then((response) => {
+        // Xử lí response từ server
+        if (response.error) {
+          // Hiển thị thông báo lỗi
+          message.open({ type: "error", content: response.error.message });
+        } else {
+          // Đăng ký thành công
+          setShowOTPForm(true); // Hiển thị form OTP sau khi đăng ký thành công
+          setShowRegisterForm(false); // Ẩn form đăng ký
+          // Truyền email từ form đăng ký vào form đăng nhập
+          setEmail(userEmail);
+        }
+      })
+      .catch((error) => {
+        // Xử lí lỗi nếu có
+        message.open({ type: "error", content: "Email đã tồn tại" });
+      });
+  };
+
+  const onLoginRedirect = () => {
+    setShowRegisterForm(false);
+    setShowOTPForm(false); // Đảm bảo không hiển thị form OTP khi quay lại form đăng nhập
   };
 
   useEffect(() => {
@@ -100,7 +166,9 @@ const Login = () => {
       <div className={formClass}>
         <img className="w-20 h-20 mb-4" alt="" src={logo} />
         <h2 className="text-center mt-4 mb-6 text-2xl font-semibold">
-          Đăng nhập vào Genealogy
+          {showRegisterForm
+            ? "Đăng ký tài khoản Genealogy"
+            : "Đăng nhập vào Genealogy"}
         </h2>
         <FormProvider {...methods}>
           {showOTPForm ? (
@@ -123,6 +191,62 @@ const Login = () => {
                 Đăng nhập
               </Button>
             </form>
+          ) : showRegisterForm ? (
+            <form
+              onSubmit={methodsRegister.handleSubmit(onRegister)}
+              className="w-full"
+            >
+              <Field
+                name="useremail"
+                type="text"
+                label="Email của bạn"
+                labelClass="required"
+                placeholder="Email"
+                value={userEmail}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUserEmail(e.target.value)
+                }
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Vui lòng nhập email",
+                  },
+                }}
+              />
+
+              <Field
+                name="username"
+                type="text"
+                label="Tên của bạn"
+                labelClass="required"
+                placeholder="Tên"
+                value={userName}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUserName(e.target.value)
+                }
+                rules={{
+                  required: {
+                    value: true,
+                    message: "Vui lòng nhập tên của bạn",
+                  },
+                }}
+              />
+
+              <Button type="primary" htmlType="submit" className="w-full mt-4">
+                Đăng ký
+              </Button>
+              <div className="flex justify-center mt-4">
+                <p>
+                  Bạn đã có tài khoản? Hãy{" "}
+                  <span
+                    className="text-blue-500 cursor-pointer"
+                    onClick={onLoginRedirect}
+                  >
+                    đăng nhập
+                  </span>
+                </p>
+              </div>
+            </form>
           ) : (
             <form onSubmit={methods.handleSubmit(onExists)} className="w-full">
               <Field
@@ -130,7 +254,7 @@ const Login = () => {
                 type="text"
                 label="Email của bạn"
                 labelClass="required"
-                placeholder="email"
+                placeholder="Email"
                 rules={{
                   required: {
                     value: true,
@@ -141,6 +265,17 @@ const Login = () => {
               <Button type="primary" htmlType="submit" className="w-full mt-4">
                 Kiểm tra
               </Button>
+              <div className="flex justify-center mt-4">
+                <p>
+                  Bạn chưa có tài khoản? Hãy{" "}
+                  <span
+                    className="text-blue-500 cursor-pointer"
+                    onClick={() => setShowRegisterForm(true)}
+                  >
+                    đăng kí
+                  </span>
+                </p>
+              </div>
             </form>
           )}
         </FormProvider>

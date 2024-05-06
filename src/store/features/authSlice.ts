@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../axios/axiosClient";
 import { loading, unLoading } from "./spinSlice";
-import { EmailExists, LoginForm } from "../../utils/typeForm";
+import { EmailExists, LoginForm, RegisterForm } from "../../utils/typeForm";
 
 type TypeLoginSlice = {
   entity: any;
@@ -53,15 +53,48 @@ const authSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(login.fulfilled, (state, action) => {
+      state.entity = action.payload;
+    });
+  },
+});
+
+export const register = createAsyncThunk(
+  "auth/email/register",
+  async (params: RegisterForm, thunkApi) => {
+    thunkApi.dispatch(loading());
+    try {
+      const respone = await axiosClient.post("/auth/email/register", params);
+      thunkApi.dispatch(unLoading());
+      return respone.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const authRegisterSlice = createSlice({
+  name: "register",
+  initialState: initialState,
+  reducers: {
+    clearAuth: (state) => {
+      state.entity = null;
+      state.error = null;
+    },
+  },
+  extraReducers(builder) {
     builder
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(register.fulfilled, (state, action) => {
         state.entity = action.payload;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
 });
+
+export const registerReducer = authRegisterSlice.reducer;
 
 export const { clearAuth } = authSlice.actions;
 

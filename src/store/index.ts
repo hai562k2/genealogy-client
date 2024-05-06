@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import spinSlice from "./features/spinSlice";
-import authSlice from "./features/authSlice";
+import authSlice, { registerReducer } from "./features/authSlice";
 import clanSlice, { clanByIdReducer } from "./features/clanSlice";
 import memberSlice from "./features/memberSlice";
 
@@ -12,6 +12,7 @@ export const store = configureStore({
     clanSlice,
     memberSlice,
     clanByIdReducer,
+    registerReducer,
   },
 });
 
