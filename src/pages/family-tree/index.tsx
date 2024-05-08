@@ -18,7 +18,6 @@ export const GenealogyTree = () => {
   }, [clanId]);
 
   useEffect(() => {
-    console.log(members);
     if (members.data.items.length !== 0) {
       const updatedNodes = members.data.items.map((item) => ({
         id: item?.id,
@@ -26,7 +25,7 @@ export const GenealogyTree = () => {
         mid: members.data.items.find((member) => member.id == item.motherId)
           ? item.motherId
           : null,
-        fid: members.data.items.find((member) => member.id == item.motherId)
+        fid: members.data.items.find((member) => member.id == item.fatherId)
           ? item.fatherId
           : null,
         name: item?.name ?? null,

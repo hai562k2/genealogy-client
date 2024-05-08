@@ -17,3 +17,13 @@ export type FormAddClan = {
   information: string;
   image?: string[];
 };
+
+export type FormInviteMember = {
+  name: string;
+  email: string;
+  motherId: number | undefined;
+  fatherId: number | undefined;
+  partnerId: (number | undefined)[];
+  gender: string;
+  roleCd: string;
+};

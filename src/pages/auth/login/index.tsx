@@ -60,7 +60,7 @@ const Login = () => {
           setShowOTPForm(true);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         message.open({ type: "error", content: "Có lỗi xảy ra" });
       });
   };

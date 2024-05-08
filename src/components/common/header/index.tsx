@@ -22,7 +22,6 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   const user = JSON.parse(localGetItem("user") || "null");
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [isCallbackApi, setIsCallBackApi] = useState<boolean>(false);
 
   const handleAddClick = () => {
     setModalVisible(true);
@@ -41,8 +40,9 @@ const Header = ({ onClick }: { onClick: () => void }) => {
         information: values.information,
         image: createStringURLImage,
       };
-      dispatch(createClan(params));
+
       form.resetFields();
+      dispatch(createClan(params));
       setInitImg(null);
       setModalVisible(false);
     }, 2000); // Chờ 1.2 giây trước khi gửi dữ liệu

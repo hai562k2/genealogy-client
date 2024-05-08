@@ -11,7 +11,7 @@ const ClanInformation = () => {
   useEffect(() => {
     dispatch(getClanByIdAsync(Number(clanId)));
   }, [clanId]);
-  console.log(clan);
+
   return (
     <div>
       <h1>{clan.name}</h1>

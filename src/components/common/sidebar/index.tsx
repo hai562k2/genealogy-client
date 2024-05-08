@@ -23,7 +23,6 @@ const Sidebar = ({
   const location = useLocation();
 
   const handleLink = () => {
-    console.log(location.pathname);
     if (clans.length <= 0) {
       return Epath.HOME;
     } else if (clanId === undefined) {
