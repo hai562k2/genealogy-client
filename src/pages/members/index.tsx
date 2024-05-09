@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import {
   getAllMemberByClanAsync,
   getMemberByClanAsync,
+  getUserByIdAsync,
   inviteMember,
 } from "../../store/features/memberSlice";
 import {
@@ -22,14 +23,17 @@ import {
 import { MdDelete, MdOutlineEdit } from "react-icons/md";
 import { DownOutlined, PlusOutlined } from "@ant-design/icons";
 import { FormInviteMember } from "../../utils/typeForm";
+import { loading } from "../../store/features/spinSlice";
 
 const Member = () => {
   const { clanId } = useParams();
   const dispatch = useAppDispatch();
   const members = useAppSelector((state) => state.memberSlice.data);
   const allMembers = useAppSelector((state) => state.AllMemberReducer.data);
+  const member = useAppSelector((state) => state.UserByIdReducer.data);
+  const navigate = useNavigate();
 
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState(""); // State để lưu từ khóa tìm kiếm
@@ -50,6 +54,8 @@ const Member = () => {
   const [gender, setGender] = useState("");
   const [roleCd, setRoleCd] = useState(2);
   const [form] = Form.useForm();
+
+  const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -118,9 +124,33 @@ const Member = () => {
   }, [allMembers]);
 
   const handleAddClick = () => {
+    setIsUpdate(false);
     setModalVisible(true);
     form.resetFields();
   };
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (member && member.__members__) {
+      setModalVisible(true);
+      form.setFieldValue("name", member.__members__.name);
+      form.setFieldValue("email", member.__members__.email);
+      setFatherName(member.__members__.fatherName?.toString() || "");
+      setMotherName(member.__members__.motherName?.toString() || "");
+      form.setFieldValue("gender", member.__members__.gender || "");
+      form.setFieldValue("roleCd", member.roleCd);
+    }
+  }, [member, form]);
+
+  const handleEdit = (id: number) => {
+    dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
+    setModalVisible(true);
+  };
+
+  useEffect(() => {
+    console.log(member);
+  }, [member]);
 
   const handleFormSubmit = (values: FormInviteMember) => {
     const params = {
@@ -155,6 +185,11 @@ const Member = () => {
 
   const columns = [
     {
+      title: "Id",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -165,18 +200,78 @@ const Member = () => {
       key: "email",
     },
     {
+      title: "Giới tính",
+      dataIndex: "gender",
+      key: "gender",
+      render: (gender: string) => (
+        <span>
+          {gender === "male" ? "Nam" : gender === "female" ? "Nữ" : ""}
+        </span>
+      ),
+    },
+    {
+      title: "Id bố",
+      dataIndex: "fatherId",
+      key: "fatherId",
+    },
+    {
+      title: "Tên bố",
+      dataIndex: "fatherName",
+      key: "fatherName",
+    },
+    {
+      title: "Id mẹ",
+      dataIndex: "motherId",
+      key: "motherId",
+    },
+    {
+      title: "Tên mẹ",
+      dataIndex: "motherName",
+      key: "motherName",
+    },
+    {
+      title: "Ngày sinh",
+      dataIndex: "birthday",
+      key: "birthday",
+      render: (record: any) => {
+        const inputDate = new Date(record);
+        const localDate = inputDate.toLocaleDateString();
+        return <span>{localDate}</span>;
+      },
+    },
+    {
       title: "",
       key: "action",
       with: "15%",
+      dataIndex: "id",
       render: (record: any) => {
         return (
           <div>
-            <button className="mr-2 p-1 rounded-md bg-blue-500 hover:bg-blue-600">
+            <Button
+              style={{
+                marginRight: "0.5rem",
+                padding: "0.25rem",
+                borderRadius: "0.375rem",
+                backgroundColor: "#007bff",
+                color: "#fff",
+                transition: "background-color 0.3s",
+              }}
+              onClick={() => handleEdit(record)}
+            >
               <MdOutlineEdit className="text-white" />
-            </button>
-            <button className="mr-2 p-1 rounded-md bg-red-500 hover:bg-red-600">
+            </Button>
+            <Button
+              style={{
+                marginRight: "0.5rem",
+                padding: "0.25rem",
+                borderRadius: "0.375rem",
+                backgroundColor: "#dc2626",
+                color: "#fff",
+                transition: "background-color 0.3s",
+              }}
+            >
               <MdDelete className="text-white" />
-            </button>
+            </Button>
           </div>
         );
       },

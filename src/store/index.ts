@@ -5,6 +5,7 @@ import clanSlice, { clanByIdReducer } from "./features/clanSlice";
 import memberSlice, {
   AllMemberReducer,
   InviteMemberReducer,
+  UserByIdReducer,
 } from "./features/memberSlice";
 
 export const store = configureStore({
@@ -18,6 +19,7 @@ export const store = configureStore({
     registerReducer,
     InviteMemberReducer,
     AllMemberReducer,
+    UserByIdReducer,
   },
 });
 

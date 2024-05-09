@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../axios/axiosClient";
 import { FormInviteMember } from "../../utils/typeForm";
 import { loading, unLoading } from "./spinSlice";
+import { useNavigate } from "react-router-dom";
 
 export type TItemMember = {
   id: number;
@@ -16,7 +17,9 @@ export type TItemMember = {
   job: string | null;
   workAddress: string | null;
   fatherId: number | null;
+  fatherName: string | null;
   motherId: number | null;
+  motherName: string | null;
   partnerId: number[];
   description: string | null;
   deadDay: Date | null;
@@ -54,24 +57,51 @@ export interface IFilterMember {
   clanId?: number | null;
 }
 
-const initialStateById: TItemMember = {
-  id: 0,
-  email: "",
-  name: "",
-  image: [],
-  gender: "",
-  birthday: null,
-  lunarBirthday: null,
-  country: null,
-  phone: null,
-  job: null,
-  workAddress: null,
-  fatherId: null,
-  motherId: null,
-  partnerId: [],
-  description: null,
-  deadDay: null,
-  lunarDeadDay: null,
+export interface IfilterMemberById {
+  clanId?: number;
+  userId?: number;
+}
+
+export type TItemMemberById = {
+  id: number;
+  userId: number;
+  clanId: number;
+  roleCd: number;
+  __members__: TItemMember;
+};
+
+export type MemberById = {
+  data: TItemMemberById;
+};
+
+const initialStateById: MemberById = {
+  data: {
+    id: 0,
+    userId: 0,
+    clanId: 0,
+    roleCd: 0,
+    __members__: {
+      id: 0,
+      email: "",
+      name: "",
+      image: [],
+      gender: "",
+      birthday: null,
+      lunarBirthday: null,
+      country: null,
+      phone: null,
+      job: null,
+      workAddress: null,
+      fatherId: null,
+      fatherName: null,
+      motherName: null,
+      motherId: null,
+      partnerId: [],
+      description: null,
+      deadDay: null,
+      lunarDeadDay: null,
+    },
+  },
 };
 
 export const getMemberByClanAsync = createAsyncThunk(
@@ -103,9 +133,11 @@ const memberSlice = createSlice({
 
 export const getUserByIdAsync = createAsyncThunk(
   "user/get-user",
-  async (id: number, thunkAPI) => {
+  async (filter: IfilterMemberById, thunkAPI) => {
     try {
-      const response = await axiosClient.get(`user/${id}`);
+      const response = await axiosClient.get(
+        `clan/role-member/user?clanId=${filter.clanId}&userId=${filter.userId}`
+      );
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -113,13 +145,13 @@ export const getUserByIdAsync = createAsyncThunk(
   }
 );
 
-const clanByIdSlice = createSlice({
+const userByIdSlice = createSlice({
   name: "user/:id",
   initialState: initialStateById,
   reducers: {},
   extraReducers(builder) {
     builder.addCase(getUserByIdAsync.fulfilled, (state, action) => {
-      state = action.payload;
+      state.data = action.payload.data;
     });
   },
 });
@@ -140,7 +172,6 @@ export const inviteMember = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       thunkApi.dispatch(unLoading());
-      console.log(error.response.data);
       return thunkApi.rejectWithValue(error.response.data.message);
     }
   }
@@ -161,7 +192,7 @@ export const getAllMemberByClanAsync = createAsyncThunk(
   "member/all",
   async (clanId: number, thunkAPI) => {
     try {
-      const response = await axiosClient.get(`users/${clanId}`);
+      const response = await axiosClient.get(`users/all/${clanId}`);
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -184,6 +215,6 @@ export const AllMemberReducer = allMemberSlice.reducer;
 
 export const InviteMemberReducer = inviteMemberSlice.reducer;
 
-export const clanByIdReducer = clanByIdSlice.reducer;
+export const UserByIdReducer = userByIdSlice.reducer;
 
 export default memberSlice.reducer;

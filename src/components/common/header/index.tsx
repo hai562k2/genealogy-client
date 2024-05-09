@@ -20,6 +20,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   const clans = useAppSelector((state) => state.clanSlice.data);
   const loading = useAppSelector((state) => state.spinSlice);
   const user = JSON.parse(localGetItem("user") || "null");
+  const [loadingButton, setLoadingButton] = useState<boolean>(false);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -34,18 +35,17 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   };
 
   const handleFormSubmit = (values: FormAddClan) => {
-    setTimeout(() => {
-      const params = {
-        name: values.name,
-        information: values.information,
-        image: createStringURLImage,
-      };
+    const newParams = {
+      name: values.name,
+      information: values.information,
+      image: createStringURLImage,
+    };
 
-      form.resetFields();
-      dispatch(createClan(params));
-      setInitImg(null);
-      setModalVisible(false);
-    }, 2000); // Chờ 1.2 giây trước khi gửi dữ liệu
+    form.resetFields();
+    setLoadingButton(false);
+    dispatch(createClan(newParams));
+    setInitImg(null);
+    setModalVisible(false);
   };
 
   const logOut = () => {
@@ -71,6 +71,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
   };
 
   const uploadImage = (event: any) => {
+    setLoadingButton(true);
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const fileType = selectedFile.type;
@@ -84,12 +85,17 @@ const Header = ({ onClick }: { onClick: () => void }) => {
         };
         uploadApiManagement.uploadImage(selectedFile).then((res) => {
           setCreateStringURLImage([`${res.data.data[0].path}`]);
+          setLoadingButton(false);
         });
         setFileInfoList((prevArray) => [...prevArray, fileInfo]);
       } else setErrorFileUpload(true);
       setTimeout(() => setErrorFileUpload(false), 1200);
     }
   };
+
+  useEffect(() => {
+    console.log("img", createStringURLImage);
+  }, [createStringURLImage]);
 
   // useEffect(() => {
   //   console.log("string", createStringURLImage);
@@ -207,6 +213,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
             style={{ color: "#333333", marginBottom: "20px" }}
           >
             <Button
+              loading={loadingButton}
               icon={<UploadOutlined />}
               style={{ backgroundColor: "#f0f2f5", color: "#333333" }}
               onClick={handelUpload}
@@ -233,7 +240,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
             )}
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" disabled={loadingButton} htmlType="submit">
               Submit
             </Button>
           </Form.Item>
