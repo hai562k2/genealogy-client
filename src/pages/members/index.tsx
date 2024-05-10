@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import {
+  DeleteMemberAsync,
   getAllMemberByClanAsync,
   getMemberByClanAsync,
+  getRoleMemberAsync,
   getUserByIdAsync,
+  getUserInforByIdAsync,
   inviteMember,
+  updateMemberProfileAsync,
 } from "../../store/features/memberSlice";
 import {
   Table,
@@ -19,11 +23,16 @@ import {
   Space,
   Radio,
   RadioChangeEvent,
+  Popconfirm,
 } from "antd";
 import { MdDelete, MdOutlineEdit } from "react-icons/md";
-import { DownOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  PlusOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { FormInviteMember } from "../../utils/typeForm";
-import { loading } from "../../store/features/spinSlice";
+import { updateUserAsync } from "../../store/features/authSlice";
 
 const Member = () => {
   const { clanId } = useParams();
@@ -31,6 +40,9 @@ const Member = () => {
   const members = useAppSelector((state) => state.memberSlice.data);
   const allMembers = useAppSelector((state) => state.AllMemberReducer.data);
   const member = useAppSelector((state) => state.UserByIdReducer.data);
+  const roleMember = useAppSelector(
+    (state) => state.RoleMemberByIdReducer.data
+  );
   const navigate = useNavigate();
 
   const [pageSize, setPageSize] = useState(5);
@@ -58,9 +70,15 @@ const Member = () => {
   const [isUpdate, setIsUpdate] = useState<boolean>(false);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [userEditId, setUserEditId] = useState<number>(0);
+  const loadingAfter = useAppSelector((state) => state.spinSlice);
 
   useEffect(() => {
     dispatch(getAllMemberByClanAsync(Number(clanId)));
+  }, [clanId]);
+
+  useEffect(() => {
+    dispatch(getRoleMemberAsync(Number(clanId)));
   }, [clanId]);
 
   useEffect(() => {
@@ -133,7 +151,6 @@ const Member = () => {
 
   useEffect(() => {
     if (member && member.__members__) {
-      setModalVisible(true);
       form.setFieldValue("name", member.__members__.name);
       form.setFieldValue("email", member.__members__.email);
       setFatherName(member.__members__.fatherName?.toString() || "");
@@ -145,6 +162,8 @@ const Member = () => {
 
   const handleEdit = (id: number) => {
     dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
+    setUserEditId(id);
+    setIsUpdate(true);
     setModalVisible(true);
   };
 
@@ -162,14 +181,30 @@ const Member = () => {
       gender: values.gender,
       roleCd: values.roleCd,
     };
-
-    form.resetFields();
-    dispatch(inviteMember({ params, id: Number(clanId) }));
-    setModalVisible(false);
+    if (!isUpdate) {
+      form.resetFields();
+      dispatch(inviteMember({ params, id: Number(clanId) }));
+    } else {
+      dispatch(updateUserAsync({ id: userEditId, data: params }));
+      dispatch(
+        updateMemberProfileAsync({
+          clanId: Number(clanId),
+          userId: userEditId,
+          roleCd: Number(params.roleCd),
+        })
+      );
+    }
   };
 
   const handleModalClose = () => {
     setModalVisible(false);
+  };
+
+  const handleDelete = (id: number) => {
+    setUserEditId(id);
+    dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
+    setUserEditId(id);
+    dispatch(DeleteMemberAsync({ id: Number(clanId), userId: userEditId }));
   };
 
   useEffect(() => {
@@ -181,7 +216,7 @@ const Member = () => {
         keyword: searchKeyword,
       })
     );
-  }, [clanId, currentPage, pageSize, dispatch, searchKeyword]);
+  }, [clanId, currentPage, pageSize, dispatch, searchKeyword, loadingAfter]);
 
   const columns = [
     {
@@ -246,7 +281,7 @@ const Member = () => {
       dataIndex: "id",
       render: (record: any) => {
         return (
-          <div>
+          <div className={`${roleMember.roleCd === 2 ? "hidden" : ""}`}>
             <Button
               style={{
                 marginRight: "0.5rem",
@@ -260,18 +295,26 @@ const Member = () => {
             >
               <MdOutlineEdit className="text-white" />
             </Button>
-            <Button
-              style={{
-                marginRight: "0.5rem",
-                padding: "0.25rem",
-                borderRadius: "0.375rem",
-                backgroundColor: "#dc2626",
-                color: "#fff",
-                transition: "background-color 0.3s",
-              }}
+            <Popconfirm
+              title="Loại bỏ thành viên"
+              description="Xóa thành viên có thể ảnh hưởng tới cây gia phả?!"
+              icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+              placement="top"
+              onConfirm={() => handleDelete(record)}
             >
-              <MdDelete className="text-white" />
-            </Button>
+              <Button
+                style={{
+                  marginRight: "0.5rem",
+                  padding: "0.25rem",
+                  borderRadius: "0.375rem",
+                  backgroundColor: "#dc2626",
+                  color: "#fff",
+                  transition: "background-color 0.3s",
+                }}
+              >
+                <MdDelete className="text-white" />
+              </Button>
+            </Popconfirm>
           </div>
         );
       },
@@ -325,11 +368,13 @@ const Member = () => {
           onChange: handlePageChange,
         }}
       />
-      <FloatButton
-        icon={<PlusOutlined style={{ fontSize: "1.2rem" }} />}
-        type="primary"
-        onClick={handleAddClick}
-      />
+      <div className={`${roleMember.roleCd === 2 ? "hidden" : ""}`}>
+        <FloatButton
+          icon={<PlusOutlined style={{ fontSize: "1.2rem" }} />}
+          type="primary"
+          onClick={handleAddClick}
+        />
+      </div>
       <Modal
         open={modalVisible}
         onCancel={handleModalClose}
@@ -464,7 +509,11 @@ const Member = () => {
             </Radio.Group>
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => handleFormSubmit}
+            >
               Submit
             </Button>
           </Form.Item>

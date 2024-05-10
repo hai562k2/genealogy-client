@@ -93,11 +93,6 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("img", createStringURLImage);
-  }, [createStringURLImage]);
-
-  // useEffect(() => {
   //   console.log("string", createStringURLImage);
   // }, [createStringURLImage]);
 

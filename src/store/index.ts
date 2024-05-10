@@ -5,8 +5,14 @@ import clanSlice, { clanByIdReducer } from "./features/clanSlice";
 import memberSlice, {
   AllMemberReducer,
   InviteMemberReducer,
+  RoleMemberByIdReducer,
   UserByIdReducer,
+  UserInfoByIdReducer,
 } from "./features/memberSlice";
+import EventSlice, {
+  CreateEventReducer,
+  EventByIdReducer,
+} from "./features/EventSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +26,11 @@ export const store = configureStore({
     InviteMemberReducer,
     AllMemberReducer,
     UserByIdReducer,
+    CreateEventReducer,
+    EventByIdReducer,
+    EventSlice,
+    UserInfoByIdReducer,
+    RoleMemberByIdReducer,
   },
 });
 

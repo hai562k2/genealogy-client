@@ -8,6 +8,16 @@ type TypeLoginSlice = {
   error: any;
 };
 
+export type UserData = {
+  name?: string;
+  image?: string[];
+  gender?: string;
+  lunarBirthday?: string;
+  country?: string;
+  phone?: string;
+  job?: string;
+};
+
 const initialState: TypeLoginSlice = {
   entity: null,
   error: null,
@@ -93,6 +103,22 @@ const authRegisterSlice = createSlice({
       });
   },
 });
+
+export const updateUserAsync = createAsyncThunk(
+  "user/update",
+  async (payload: { id: number; data: UserData }, thunkApi) => {
+    thunkApi.dispatch(loading());
+    try {
+      const { id, data } = payload;
+      const respone = await axiosClient.patch(`/users/${id}`, data);
+      thunkApi.dispatch(unLoading());
+      return respone.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const registerReducer = authRegisterSlice.reducer;
 

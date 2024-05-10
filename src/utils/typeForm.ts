@@ -27,3 +27,12 @@ export type FormInviteMember = {
   gender: string;
   roleCd: string;
 };
+
+export type FormAddEvent = {
+  clanId: number;
+  content: string;
+  timeEvent: Date;
+  image?: string[];
+};
+
+export type FormUpdateUser = {};

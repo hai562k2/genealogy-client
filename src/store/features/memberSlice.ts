@@ -41,6 +41,34 @@ export type AllMember = {
   data: TItemMember[];
 };
 
+export type TUser = {
+  data: TItemMember;
+};
+
+const initialUserState: TUser = {
+  data: {
+    id: 0,
+    email: "",
+    name: "",
+    image: [],
+    gender: "",
+    birthday: new Date("2020-01-01"),
+    lunarBirthday: new Date("2020-01-01"),
+    country: "",
+    phone: "",
+    job: "",
+    workAddress: "",
+    fatherId: 0,
+    fatherName: "",
+    motherId: 0,
+    motherName: "",
+    partnerId: [],
+    description: "",
+    deadDay: new Date("2020-01-01"),
+    lunarDeadDay: new Date("2020-01-01"),
+  },
+};
+
 const initialAllMemberState: AllMember = {
   data: [],
 };
@@ -75,6 +103,36 @@ export type MemberById = {
 };
 
 const initialStateById: MemberById = {
+  data: {
+    id: 0,
+    userId: 0,
+    clanId: 0,
+    roleCd: 0,
+    __members__: {
+      id: 0,
+      email: "",
+      name: "",
+      image: [],
+      gender: "",
+      birthday: null,
+      lunarBirthday: null,
+      country: null,
+      phone: null,
+      job: null,
+      workAddress: null,
+      fatherId: null,
+      fatherName: null,
+      motherName: null,
+      motherId: null,
+      partnerId: [],
+      description: null,
+      deadDay: null,
+      lunarDeadDay: null,
+    },
+  },
+};
+
+const initialRoleMemberStateById: MemberById = {
   data: {
     id: 0,
     userId: 0,
@@ -156,6 +214,29 @@ const userByIdSlice = createSlice({
   },
 });
 
+export const getUserInforByIdAsync = createAsyncThunk(
+  "user/get-user",
+  async (id: number, thunkAPI) => {
+    try {
+      const response = await axiosClient.get(`/users/${id}`);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const userInfoById = createSlice({
+  name: "user/:id",
+  initialState: initialUserState,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getUserInforByIdAsync.fulfilled, (state, action) => {
+      state.data = action.payload.data;
+    });
+  },
+});
+
 export const inviteMember = createAsyncThunk(
   "members/invite",
   async (
@@ -211,10 +292,77 @@ const allMemberSlice = createSlice({
   },
 });
 
+export type MemberData = {
+  clanId: number;
+  userId: number;
+  roleCd: number;
+};
+
+export const updateMemberProfileAsync = createAsyncThunk(
+  "clan/member/updateProfile",
+  async (data: MemberData, thunkApi) => {
+    thunkApi.dispatch(loading());
+    try {
+      const response = await axiosClient.patch("/clan/member/profile", data);
+      thunkApi.dispatch(unLoading());
+      return response.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getRoleMemberAsync = createAsyncThunk(
+  "user/get-role-member",
+  async (clanId: number, thunkAPI) => {
+    try {
+      const response = await axiosClient.get(`/clan/role-member/${clanId}`);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export type RemoveUser = {
+  id: number;
+  userId: number;
+};
+
+export const DeleteMemberAsync = createAsyncThunk(
+  "user/delete-member",
+  async (data: RemoveUser, thunkAPI) => {
+    try {
+      const response = await axiosClient.delete(
+        `/clan/clan/remove/member?id=${data.id}&userId=${data.userId}`
+      );
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const roleMemberByIdSlice = createSlice({
+  name: "user-role/:id",
+  initialState: initialRoleMemberStateById,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getRoleMemberAsync.fulfilled, (state, action) => {
+      state.data = action.payload.data;
+    });
+  },
+});
+
 export const AllMemberReducer = allMemberSlice.reducer;
 
 export const InviteMemberReducer = inviteMemberSlice.reducer;
 
 export const UserByIdReducer = userByIdSlice.reducer;
+
+export const UserInfoByIdReducer = userInfoById.reducer;
+
+export const RoleMemberByIdReducer = roleMemberByIdSlice.reducer;
 
 export default memberSlice.reducer;

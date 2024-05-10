@@ -10,6 +10,11 @@ import ProjectManager from "../pages/project-manager";
 import { GenealogyTree } from "../pages/family-tree";
 import ClanInformation from "../pages/genealogy-information";
 import Member from "../pages/members";
+import NotFoundMember from "../pages/NotFound/notFoundMember";
+import NotFoundEvent from "../pages/NotFound/notFoundEvent";
+import NotFoundGenealogy from "../pages/NotFound/notFoundGenealogy";
+import NOtFoundFamilyTree from "../pages/NotFound/notFoundFamilyTree";
+import EventFamily from "../pages/event-family";
 
 const RootRouter = () => {
   const isLoading = useAppSelector((state) => state.spinSlice.value);
@@ -52,6 +57,26 @@ const RootRouter = () => {
         {
           path: Epath.MEMBERS,
           element: <Member />,
+        },
+        {
+          path: Epath.NOT_FOUND_MEMER,
+          element: <NotFoundMember />,
+        },
+        {
+          path: Epath.NOT_FOUND_EVENT,
+          element: <NotFoundEvent />,
+        },
+        {
+          path: Epath.NOT_FOUND_CLAN_INFORMATION,
+          element: <NotFoundGenealogy />,
+        },
+        {
+          path: Epath.NOT_FOUND_FAMILY_TREE,
+          element: <NOtFoundFamilyTree />,
+        },
+        {
+          path: Epath.EVENT,
+          element: <EventFamily />,
         },
       ],
     },

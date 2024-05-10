@@ -1,0 +1,53 @@
+.box_account
+  margin: 32px 200px 235px 200px
+  display: flex
+  flex-direction: column
+  gap: 24px
+  color: #1D1C16
+.form_edit_account
+  display: flex
+  flex-direction: column
+  gap: 24px
+  .avatar
+    .image
+      width: 80px
+      height: 80px
+      background-color: #D9D9D9
+      border-radius: 50%
+      display: flex
+      justify-content: center
+      align-items: center
+      .short_name
+        font-size: 30px
+  .account_name
+    .input_name
+      height: 56px
+      padding: 8px 0 8px 16px
+      font-size: 16px
+      margin-top: 8px
+      border-radius: 4px
+      border: 1px solid #959181
+      color: #1D1C16
+  .business_content
+    .content
+      height: 200px
+      border-radius: 4px
+      border: 1px solid #959181
+      padding: 4px 16px
+      font-size: 16px
+      margin-top: 8px
+
+      textarea
+        height: 100% !important
+        overflow-y: auto !important
+
+
+.text_delete_account
+  font-size: 18px
+.btn_delete_account
+  background-color: #BA1A1A
+  color: #FFFFFF
+
+@media only screen and (max-width: 1280px)
+  .box_account
+    margin: 0

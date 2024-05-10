@@ -97,4 +97,19 @@ export const createClan = createAsyncThunk(
   }
 );
 
+export const updateClanAsync = createAsyncThunk(
+  "clan/update",
+  async ({ params, id }: { params: TItemClan; id: number }, thunkApi) => {
+    thunkApi.dispatch(loading());
+    try {
+      const respone = await axiosClient.patch(`/clan/${id}`, params);
+      thunkApi.dispatch(unLoading());
+      return respone.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export default clanSlice.reducer;

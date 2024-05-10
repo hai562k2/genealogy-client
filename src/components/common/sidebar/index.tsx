@@ -7,6 +7,9 @@ import {
   faChartSimple,
   faCircleArrowLeft,
   faCircleArrowRight,
+  faInfoCircle,
+  faTree,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppSelector } from "../../../store/hook";
@@ -24,7 +27,7 @@ const Sidebar = ({
 
   const handleLink = () => {
     if (clans.length <= 0) {
-      return Epath.HOME;
+      return Epath.NOT_FOUND_FAMILY_TREE;
     } else if (clanId === undefined) {
       return `family-tree/${clans[0].id}`;
     } else return `family-tree/${clanId}`;
@@ -32,7 +35,7 @@ const Sidebar = ({
 
   const handleLinkMember = () => {
     if (clans.length <= 0) {
-      return Epath.HOME;
+      return Epath.NOT_FOUND_MEMER;
     } else if (clanId === undefined) {
       return `member/${clans[0].id}`;
     } else return `member/${clanId}`;
@@ -40,16 +43,24 @@ const Sidebar = ({
 
   const handleLinkInformation = () => {
     if (clans.length <= 0) {
-      return Epath.HOME;
+      return Epath.NOT_FOUND_CLAN_INFORMATION;
     } else if (clanId === undefined) {
       return `information/${clans[0].id}`;
     } else return `information/${clanId}`;
+  };
+
+  const handleLinkEvent = () => {
+    if (clans.length <= 0) {
+      return Epath.NOT_FOUND_EVENT;
+    } else if (clanId === undefined) {
+      return `event/${clans[0].id}`;
+    } else return `event/${clanId}`;
   };
   const items = [
     {
       key: "home",
       link: Epath.HOME,
-      label: "Quản lý bài đăng",
+      label: "Genealogy",
       icon: faChartSimple,
     },
 
@@ -57,19 +68,25 @@ const Sidebar = ({
       key: "familyTree",
       link: handleLink(),
       label: "Cây gia phả",
-      icon: faChartSimple,
+      icon: faTree,
     },
     {
       key: "clanInformation",
       link: handleLinkInformation(),
-      label: "Dòng họ",
-      icon: faChartSimple,
+      label: "Thông tin Dòng họ",
+      icon: faInfoCircle,
     },
     {
       key: "clanMember",
       link: handleLinkMember(),
       label: "Thành viên",
-      icon: faChartSimple,
+      icon: faUser,
+    },
+    {
+      key: "clanEvent",
+      link: handleLinkEvent(),
+      label: "Sự kiện",
+      icon: faUser,
     },
   ];
 
