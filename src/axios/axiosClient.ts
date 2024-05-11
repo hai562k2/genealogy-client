@@ -3,7 +3,7 @@ import { StatusCode } from "../utils/enum";
 import { localGetItem } from "../utils/storage";
 
 const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: "https://newtechus.online",
   headers: {
     Accepted: "application/json",
     "Content-Type": "application/json; charset=utf-8",
