@@ -201,10 +201,10 @@ const Member = () => {
   };
 
   const handleDelete = (id: number) => {
-    setUserEditId(id);
-    dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
-    setUserEditId(id);
-    dispatch(DeleteMemberAsync({ id: Number(clanId), userId: userEditId }));
+    // setUserEditId(id);
+    // dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
+    // setUserEditId(id);
+    // dispatch(DeleteMemberAsync({ id: Number(clanId), userId: userEditId }));
   };
 
   useEffect(() => {
