@@ -39,7 +39,7 @@ const Profile = () => {
       phone: user.phone,
       job: user.job,
     });
-  }, [form, user]);
+  }, [form]);
 
   const [fileInfoList, setFileInfoList] = useState<
     { file: string; type: string; name?: string }[]
@@ -99,7 +99,7 @@ const Profile = () => {
     };
     console.log("data", newParams);
     dispatch(updateUserAsync({ id: userLocal.id, data: newParams }));
-
+    dispatch(getUserInforByIdAsync(Number(userLocal?.id)));
     setLoadingButton(false);
   };
 

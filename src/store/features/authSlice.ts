@@ -107,7 +107,7 @@ const authRegisterSlice = createSlice({
 export const updateUserAsync = createAsyncThunk(
   "user/update",
   async (payload: { id: number; data: UserData }, thunkApi) => {
-    thunkApi.dispatch(loading());
+    thunkApi.dispatch(unLoading());
     try {
       const { id, data } = payload;
       const respone = await axiosClient.patch(`/users/${id}`, data);
