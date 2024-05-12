@@ -83,7 +83,7 @@ const Member = () => {
 
   useEffect(() => {
     if (allMembers.length > 0) {
-      const parent: any = [{ name: "Khong co du lieu", id: 1000000 }];
+      const parent: any = [];
 
       allMembers.forEach((item) => {
         parent.push({
