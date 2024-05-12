@@ -243,7 +243,7 @@ export const inviteMember = createAsyncThunk(
     { params, id }: { params: FormInviteMember; id: number },
     thunkApi
   ) => {
-    thunkApi.dispatch(loading());
+    thunkApi.dispatch(unLoading());
     try {
       const response = await axiosClient.post(
         `/clan/${id}/members/invite`,
@@ -301,7 +301,7 @@ export type MemberData = {
 export const updateMemberProfileAsync = createAsyncThunk(
   "clan/member/updateProfile",
   async (data: MemberData, thunkApi) => {
-    thunkApi.dispatch(loading());
+    thunkApi.dispatch(unLoading());
     try {
       const response = await axiosClient.patch("/clan/member/profile", data);
       thunkApi.dispatch(unLoading());
