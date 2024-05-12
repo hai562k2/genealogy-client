@@ -83,7 +83,7 @@ const Member = () => {
 
   useEffect(() => {
     if (allMembers.length > 0) {
-      const parent: any = [];
+      const parent: any = [{ name: "Khong co du lieu", id: 1000000 }];
 
       allMembers.forEach((item) => {
         parent.push({
@@ -158,7 +158,7 @@ const Member = () => {
       form.setFieldValue("gender", member.__members__.gender || "");
       form.setFieldValue("roleCd", member.roleCd);
     }
-  }, [member, form]);
+  }, [member, form, members]);
 
   const handleEdit = (id: number) => {
     dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
@@ -184,6 +184,15 @@ const Member = () => {
     if (!isUpdate) {
       form.resetFields();
       dispatch(inviteMember({ params, id: Number(clanId) }));
+      dispatch(
+        getMemberByClanAsync({
+          page: currentPage,
+          limit: pageSize,
+          clanId: Number(clanId),
+          keyword: searchKeyword,
+        })
+      );
+      setModalVisible(false);
     } else {
       dispatch(updateUserAsync({ id: userEditId, data: params }));
       dispatch(
@@ -193,6 +202,15 @@ const Member = () => {
           roleCd: Number(params.roleCd),
         })
       );
+      dispatch(
+        getMemberByClanAsync({
+          page: currentPage,
+          limit: pageSize,
+          clanId: Number(clanId),
+          keyword: searchKeyword,
+        })
+      );
+      setModalVisible(false);
     }
   };
 
@@ -263,6 +281,11 @@ const Member = () => {
       title: "Tên mẹ",
       dataIndex: "motherName",
       key: "motherName",
+    },
+    {
+      title: "Id vợ hoặc chồng",
+      dataIndex: "partnerId",
+      key: "partnerId",
     },
     {
       title: "Ngày sinh",
