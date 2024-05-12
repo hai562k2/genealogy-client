@@ -39,7 +39,7 @@ const Profile = () => {
       phone: user.phone,
       job: user.job,
     });
-  }, [form]);
+  }, [form, user]);
 
   const [fileInfoList, setFileInfoList] = useState<
     { file: string; type: string; name?: string }[]
