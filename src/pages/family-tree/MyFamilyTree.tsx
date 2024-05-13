@@ -76,6 +76,7 @@ export default class MyFamilyTree extends Component<Props> {
       // Render the family tree with updated nodes
       this.family = new FamilyTree(this.divRef.current, {
         nodes: this.props.nodes,
+        template: "hugo",
         nodeBinding: {
           field_0: "name",
           img_0: "img",

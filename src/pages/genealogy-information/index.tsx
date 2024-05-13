@@ -20,11 +20,20 @@ const ClanInformation = () => {
   const handleEdit = () => {};
 
   return (
-    <div>
-      <h1>{clan.name}</h1>
-      <p>{clan.information}</p>
-      <img src={clan.image[0]} alt="" />
-      {/* Hiển thị thông tin của clan tại đây */}
+    <div className="flex flex-col justify-center items-center p-5">
+      <img
+        className="w-[200px] h-[200px] p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+        src={clan.image[0]}
+        alt="Bordered avatar"
+      />
+      <h1 style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}>
+        {clan.name}
+      </h1>
+      <div
+        dangerouslySetInnerHTML={{
+          __html: clan.information.replaceAll("\n", "<br />") || "",
+        }}
+      />
       <div>
         <FloatButton
           icon={<EditOutlined style={{ fontSize: "1.2rem" }} />}

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hook";
 import {
   DeleteMemberAsync,
+  TItemMember,
   getAllMemberByClanAsync,
   getMemberByClanAsync,
   getRoleMemberAsync,
@@ -43,7 +44,6 @@ const Member = () => {
   const roleMember = useAppSelector(
     (state) => state.RoleMemberByIdReducer.data
   );
-  const navigate = useNavigate();
 
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,7 +71,8 @@ const Member = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [userEditId, setUserEditId] = useState<number>(0);
-  const loadingAfter = useAppSelector((state) => state.spinSlice);
+
+  const [formSubmitCounter, setFormSubmitCounter] = useState(0);
 
   useEffect(() => {
     dispatch(getAllMemberByClanAsync(Number(clanId)));
@@ -147,8 +148,6 @@ const Member = () => {
     form.resetFields();
   };
 
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     if (member && member.__members__) {
       form.setFieldValue("name", member.__members__.name);
@@ -167,10 +166,6 @@ const Member = () => {
     setModalVisible(true);
   };
 
-  useEffect(() => {
-    console.log(member);
-  }, [member]);
-
   const handleFormSubmit = (values: FormInviteMember) => {
     const params = {
       name: values.name,
@@ -184,15 +179,8 @@ const Member = () => {
     if (!isUpdate) {
       form.resetFields();
       dispatch(inviteMember({ params, id: Number(clanId) }));
-      dispatch(
-        getMemberByClanAsync({
-          page: currentPage,
-          limit: pageSize,
-          clanId: Number(clanId),
-          keyword: searchKeyword,
-        })
-      );
       setModalVisible(false);
+      setFormSubmitCounter((prevCounter) => prevCounter + 1);
     } else {
       dispatch(updateUserAsync({ id: userEditId, data: params }));
       dispatch(
@@ -202,14 +190,9 @@ const Member = () => {
           roleCd: Number(params.roleCd),
         })
       );
-      dispatch(
-        getMemberByClanAsync({
-          page: currentPage,
-          limit: pageSize,
-          clanId: Number(clanId),
-          keyword: searchKeyword,
-        })
-      );
+
+      setFormSubmitCounter((prevCounter) => prevCounter + 1);
+
       setModalVisible(false);
     }
   };
@@ -219,10 +202,9 @@ const Member = () => {
   };
 
   const handleDelete = (id: number) => {
-    // setUserEditId(id);
-    // dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
-    // setUserEditId(id);
-    // dispatch(DeleteMemberAsync({ id: Number(clanId), userId: userEditId }));
+    setUserEditId(id);
+    dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
+    dispatch(DeleteMemberAsync({ id: Number(clanId), userId: id }));
   };
 
   useEffect(() => {
@@ -234,7 +216,14 @@ const Member = () => {
         keyword: searchKeyword,
       })
     );
-  }, [clanId, currentPage, pageSize, dispatch, searchKeyword, loadingAfter]);
+  }, [
+    clanId,
+    currentPage,
+    pageSize,
+    dispatch,
+    searchKeyword,
+    formSubmitCounter,
+  ]);
 
   const columns = [
     {
@@ -246,6 +235,7 @@ const Member = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      render: (name: string) => name,
     },
     {
       title: "Email",

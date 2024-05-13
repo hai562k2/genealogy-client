@@ -12,6 +12,7 @@ import { createClan, getClanAsync } from "../../../store/features/clanSlice";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { FormAddClan } from "../../../utils/typeForm";
 import { uploadApiManagement } from "../../../utils/helpers";
+import TextArea from "antd/es/input/TextArea";
 
 const Header = ({ onClick }: { onClick: () => void }) => {
   const navigate = useNavigate();
@@ -198,7 +199,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
             wrapperCol={{ span: 24 }}
             style={{ color: "#333333", marginBottom: "20px" }}
           >
-            <Input />
+            <TextArea />
           </Form.Item>
           <Form.Item
             label="Ảnh"
