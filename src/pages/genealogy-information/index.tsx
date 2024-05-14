@@ -7,6 +7,7 @@ import {
 } from "../../store/features/clanSlice";
 import { FloatButton } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import bgImage from "../../assets/images/background-clan-infor.png";
 
 const ClanInformation = () => {
   const { clanId } = useParams();
@@ -20,19 +21,29 @@ const ClanInformation = () => {
   const handleEdit = () => {};
 
   return (
-    <div className="flex flex-col justify-center items-center p-5">
+    <div
+      className={`flex flex-col items-center gap-3 p-5 h-full`}
+      style={{ backgroundImage: `url(${bgImage})`, backgroundSize: "cover" }}
+    >
       <img
-        className="w-[200px] h-[200px] p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500"
+        className="w-[200px] h-[200px] mt-5 p-1 rounded-full"
         src={clan.image[0]}
         alt="Bordered avatar"
       />
-      <h1 style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}>
+      <h1
+        style={{
+          textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+          fontFamily: "'VNI-Butlong', sans-serif",
+        }}
+        className=""
+      >
         {clan.name}
       </h1>
       <div
         dangerouslySetInnerHTML={{
           __html: clan.information.replaceAll("\n", "<br />") || "",
         }}
+        style={{ fontFamily: "'VNI-Briquet', sans-serif" }}
       />
       <div>
         <FloatButton
