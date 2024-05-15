@@ -35,7 +35,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     setModalVisible(false);
   };
 
-  const handleFormSubmit = (values: FormAddClan) => {
+  const handleFormSubmit = async (values: FormAddClan) => {
     const newParams = {
       name: values.name,
       information: values.information,
@@ -44,7 +44,8 @@ const Header = ({ onClick }: { onClick: () => void }) => {
 
     form.resetFields();
     setLoadingButton(false);
-    dispatch(createClan(newParams));
+    await dispatch(createClan(newParams));
+    loadClan();
     setInitImg(null);
     setModalVisible(false);
   };
@@ -111,8 +112,12 @@ const Header = ({ onClick }: { onClick: () => void }) => {
     },
   ];
 
-  useEffect(() => {
+  const loadClan = () => {
     dispatch(getClanAsync({}));
+  };
+
+  useEffect(() => {
+    loadClan();
   }, [loading]);
 
   // Set default navigate to the first clan

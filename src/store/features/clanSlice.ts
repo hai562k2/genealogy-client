@@ -91,7 +91,7 @@ export const clanByIdReducer = clanByIdSlice.reducer;
 export const createClan = createAsyncThunk(
   "clan/create",
   async (params: FormAddClan, thunkApi) => {
-    thunkApi.dispatch(loading());
+    //thunkApi.dispatch(loading());
     try {
       const respone = await axiosClient.post("/clan", params);
       thunkApi.dispatch(unLoading());
