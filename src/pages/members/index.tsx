@@ -166,7 +166,31 @@ const Member = () => {
     setModalVisible(true);
   };
 
-  const handleFormSubmit = (values: FormInviteMember) => {
+  //
+  const loadData = () => {
+    dispatch(
+      getMemberByClanAsync({
+        page: currentPage,
+        limit: pageSize,
+        clanId: Number(clanId),
+        keyword: searchKeyword,
+      })
+    );
+  };
+  //
+
+  useEffect(() => {
+    loadData();
+  }, [
+    clanId,
+    currentPage,
+    pageSize,
+    dispatch,
+    searchKeyword,
+    formSubmitCounter,
+  ]);
+
+  const handleFormSubmit = async (values: FormInviteMember) => {
     const params = {
       name: values.name,
       email: values.email,
@@ -178,22 +202,21 @@ const Member = () => {
     };
     if (!isUpdate) {
       form.resetFields();
-      dispatch(inviteMember({ params, id: Number(clanId) })).then(() => {
-        dispatch(
-          getMemberByClanAsync({ page: 1, limit: 10, clanId: Number(clanId) })
-        );
-      });
+      await dispatch(inviteMember({ params, id: Number(clanId) }));
+
+      loadData();
       setModalVisible(false);
       setFormSubmitCounter((prevCounter) => prevCounter + 1);
     } else {
-      dispatch(updateUserAsync({ id: userEditId, data: params }));
-      dispatch(
+      await dispatch(updateUserAsync({ id: userEditId, data: params }));
+      await dispatch(
         updateMemberProfileAsync({
           clanId: Number(clanId),
-          userId: userEditId,
+          userId: Number(userEditId),
           roleCd: Number(params.roleCd),
         })
       );
+      loadData();
 
       setFormSubmitCounter((prevCounter) => prevCounter + 1);
 
@@ -205,29 +228,11 @@ const Member = () => {
     setModalVisible(false);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     setUserEditId(id);
-    dispatch(getUserByIdAsync({ clanId: Number(clanId), userId: Number(id) }));
-    dispatch(DeleteMemberAsync({ id: Number(clanId), userId: id }));
+    await dispatch(DeleteMemberAsync({ id: Number(clanId), userId: id }));
+    loadData();
   };
-
-  useEffect(() => {
-    dispatch(
-      getMemberByClanAsync({
-        page: currentPage,
-        limit: pageSize,
-        clanId: Number(clanId),
-        keyword: searchKeyword,
-      })
-    );
-  }, [
-    clanId,
-    currentPage,
-    pageSize,
-    dispatch,
-    searchKeyword,
-    formSubmitCounter,
-  ]);
 
   const columns = [
     {
@@ -359,7 +364,7 @@ const Member = () => {
     setGender(e.target.value);
   };
 
-  const handleRoleCd = (e: RadioChangeEvent) => {
+  const handleRoleCd = async (e: RadioChangeEvent) => {
     setRoleCd(e.target.value);
   };
 
