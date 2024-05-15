@@ -13,8 +13,17 @@
 
 @font-face {
   font-family: "VNI-Briquet";
-  src: url("./assets/fonts/VNI-BriquetNormal.woff2") format("woff2"),
-    url("./assets/fonts/VNI-BriquetNormal.woff") format("woff");
+  src: url("./assets/fonts/HLSlapstickComic.woff2") format("woff2"),
+    url("./assets/fonts/HLSlapstickComic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "VNI-THUPHAPTHANHCONG";
+  src: url("./assets/fonts/UVNButLong1.woff2") format("woff2"),
+    url("./assets/fonts/UVNButLong1.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

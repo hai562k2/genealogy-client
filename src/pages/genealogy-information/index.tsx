@@ -33,7 +33,7 @@ const ClanInformation = () => {
       <h1
         style={{
           textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-          fontFamily: "'VNI-Butlong', sans-serif",
+          fontFamily: "'VNI-THUPHAPTHANHCONG', sans-serif",
         }}
         className=""
       >
@@ -43,7 +43,10 @@ const ClanInformation = () => {
         dangerouslySetInnerHTML={{
           __html: clan.information.replaceAll("\n", "<br />") || "",
         }}
-        style={{ fontFamily: "'VNI-Briquet', sans-serif" }}
+        style={{
+          fontFamily: "'VNI-THUPHAPTHANHCONG', sans-serif",
+          fontSize: "1rem",
+        }}
       />
       <div>
         <FloatButton

@@ -178,7 +178,11 @@ const Member = () => {
     };
     if (!isUpdate) {
       form.resetFields();
-      dispatch(inviteMember({ params, id: Number(clanId) }));
+      dispatch(inviteMember({ params, id: Number(clanId) })).then(() => {
+        dispatch(
+          getMemberByClanAsync({ page: 1, limit: 10, clanId: Number(clanId) })
+        );
+      });
       setModalVisible(false);
       setFormSubmitCounter((prevCounter) => prevCounter + 1);
     } else {
