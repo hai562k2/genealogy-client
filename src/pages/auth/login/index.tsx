@@ -61,7 +61,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        message.open({ type: "error", content: "Có lỗi xảy ra" });
+        message.open({ type: "error", content: "Email không tồn tại" });
       });
   };
 

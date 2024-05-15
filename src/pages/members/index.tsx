@@ -25,6 +25,7 @@ import {
   Radio,
   RadioChangeEvent,
   Popconfirm,
+  message,
 } from "antd";
 import { MdDelete, MdOutlineEdit } from "react-icons/md";
 import {
@@ -201,26 +202,63 @@ const Member = () => {
       roleCd: values.roleCd,
     };
     if (!isUpdate) {
-      form.resetFields();
-      await dispatch(inviteMember({ params, id: Number(clanId) }));
-
-      loadData();
-      setModalVisible(false);
-      setFormSubmitCounter((prevCounter) => prevCounter + 1);
+      try {
+        await dispatch(inviteMember({ params, id: Number(clanId) })).unwrap();
+        form.resetFields();
+        loadData();
+        setModalVisible(false);
+      } catch (error: any) {
+        if (error.message === "EA0004") {
+          console.log(error.message);
+          form.setFields([
+            {
+              name: "email",
+              errors: ["Email đã tồn tại"],
+            },
+          ]);
+        } else if (error.email === "EA0001") {
+          form.setFields([
+            {
+              name: "email",
+              errors: ["Email không đúng định dạng"],
+            },
+          ]);
+          console.log(error.message);
+        } else {
+          console.log(error);
+        }
+      }
     } else {
-      await dispatch(updateUserAsync({ id: userEditId, data: params }));
-      await dispatch(
-        updateMemberProfileAsync({
-          clanId: Number(clanId),
-          userId: Number(userEditId),
-          roleCd: Number(params.roleCd),
-        })
-      );
-      loadData();
-
-      setFormSubmitCounter((prevCounter) => prevCounter + 1);
-
-      setModalVisible(false);
+      try {
+        await dispatch(updateUserAsync({ id: userEditId, data: params }));
+        await dispatch(
+          updateMemberProfileAsync({
+            clanId: Number(clanId),
+            userId: Number(userEditId),
+            roleCd: Number(params.roleCd),
+          })
+        );
+        loadData();
+        setModalVisible(false);
+      } catch (error: any) {
+        if (error.message === "EA0004") {
+          form.setFields([
+            {
+              name: "email",
+              errors: ["Email đã tồn tại"],
+            },
+          ]);
+        } else if (error.email === "EA0001") {
+          form.setFields([
+            {
+              name: "email",
+              errors: ["Email không đúng định dạng"],
+            },
+          ]);
+        } else {
+          console.log(error);
+        }
+      }
     }
   };
 
@@ -230,7 +268,15 @@ const Member = () => {
 
   const handleDelete = async (id: number) => {
     setUserEditId(id);
-    await dispatch(DeleteMemberAsync({ id: Number(clanId), userId: id }));
+    await dispatch(DeleteMemberAsync({ id: Number(clanId), userId: id }))
+      .unwrap()
+      .then((response) => {})
+      .catch((error) => {
+        message.open({
+          type: "error",
+          content: "Không thể xóa quản lý dòng họ",
+        });
+      });
     loadData();
   };
 
