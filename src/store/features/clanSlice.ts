@@ -10,6 +10,12 @@ export type TItemClan = {
   image: string[];
 };
 
+export type TItemEditClan = {
+  name?: string;
+  information?: string;
+  image?: string[];
+};
+
 type TClanById = {
   data: TItemClan;
 };
@@ -99,7 +105,7 @@ export const createClan = createAsyncThunk(
 
 export const updateClanAsync = createAsyncThunk(
   "clan/update",
-  async ({ params, id }: { params: TItemClan; id: number }, thunkApi) => {
+  async ({ params, id }: { params: TItemEditClan; id: number }, thunkApi) => {
     thunkApi.dispatch(loading());
     try {
       const respone = await axiosClient.patch(`/clan/${id}`, params);

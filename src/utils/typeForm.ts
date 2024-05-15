@@ -18,6 +18,12 @@ export type FormAddClan = {
   image?: string[];
 };
 
+export type FormEditCan = {
+  name?: string;
+  information?: string;
+  image?: string[];
+};
+
 export type FormInviteMember = {
   name: string;
   email: string;
