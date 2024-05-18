@@ -5,6 +5,7 @@ import { loading, unLoading } from "./spinSlice";
 
 export type TItemEvent = {
   id: number;
+  clanId: number;
   content: string;
   name: string;
   image: string[];
@@ -27,7 +28,16 @@ const initialState: TEvent = {
 };
 
 type TEventById = {
-  data: TItemEvent;
+  data: TItemEventById;
+};
+
+export type TItemEventById = {
+  id: number;
+  content: string;
+  name: string;
+  image: string[];
+  timeEvent: Date | null;
+  comments: TItemEventComment[];
 };
 
 const initialStateById: TEventById = {
@@ -37,6 +47,7 @@ const initialStateById: TEventById = {
     name: "",
     image: [],
     timeEvent: new Date("2024-01-10T09:15:13.759Z"),
+    comments: [],
   },
 };
 
@@ -46,6 +57,28 @@ export interface IFilterEvent {
   keyword?: string;
   clanId?: number | null;
 }
+
+export type TItemEventComment = {
+  id: number;
+  eventId: number;
+  createdAt: Date;
+  content: string;
+  image: string[];
+};
+
+export type TEventComment = {
+  data: TItemEventComment[];
+};
+
+const initialEventCommentState: TEventComment = {
+  data: [],
+};
+
+export type TItemEditEvent = {
+  content?: string;
+  timeEvent?: string;
+  image?: string[];
+};
 
 export const getEventByClanAsync = createAsyncThunk(
   "event/clan",
@@ -64,7 +97,7 @@ export const getEventByClanAsync = createAsyncThunk(
 );
 
 const eventSlice = createSlice({
-  name: "member",
+  name: "event",
   initialState: initialState,
   reducers: {},
   extraReducers(builder) {
@@ -122,6 +155,46 @@ const createEventSlice = createSlice({
     });
   },
 });
+
+export const getEventCommentByEventAsync = createAsyncThunk(
+  "event-comment/event",
+  async (eventId: number, thunkAPI) => {
+    try {
+      const response = await axiosClient.get(`/event/event-comment/${eventId}`);
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+const eventCommentSlice = createSlice({
+  name: "event-comment",
+  initialState: initialEventCommentState,
+  reducers: {},
+  extraReducers(builder) {
+    builder.addCase(getEventCommentByEventAsync.fulfilled, (state, action) => {
+      state.data = action.payload.data;
+    });
+  },
+});
+
+export const updateClanAsync = createAsyncThunk(
+  "clan/update",
+  async ({ params, id }: { params: TItemEditEvent; id: number }, thunkApi) => {
+    thunkApi.dispatch(loading());
+    try {
+      const respone = await axiosClient.patch(`/event/${id}`, params);
+      thunkApi.dispatch(unLoading());
+      return respone.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const eventCommentReducer = eventCommentSlice.reducer;
 
 export const CreateEventReducer = createEventSlice.reducer;
 

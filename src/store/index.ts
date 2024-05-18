@@ -12,6 +12,7 @@ import memberSlice, {
 import EventSlice, {
   CreateEventReducer,
   EventByIdReducer,
+  eventCommentReducer,
 } from "./features/EventSlice";
 
 export const store = configureStore({
@@ -31,6 +32,7 @@ export const store = configureStore({
     EventSlice,
     UserInfoByIdReducer,
     RoleMemberByIdReducer,
+    eventCommentReducer,
   },
 });
 

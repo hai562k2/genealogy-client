@@ -136,6 +136,8 @@ const Header = ({ onClick }: { onClick: () => void }) => {
       navigate(`/member/${id}`);
     } else if (location.pathname.includes("information")) {
       navigate(`/information/${id}`);
+    } else if (location.pathname.includes("event")) {
+      navigate(`/event/${id}`);
     }
   };
 

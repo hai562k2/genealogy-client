@@ -1,0 +1,60 @@
+.baseText {
+  &[data-variant="title"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 48px;
+  }
+
+  &[data-variant="length"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 500;
+    line-height: 21px;
+    letter-spacing: 0.1px;
+  }
+
+  &[data-variant="text-status"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 500;
+    line-height: 16.5px;
+    letter-spacing: 0.5px;
+  }
+
+  &[data-variant="text-link"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 24.5px;
+    letter-spacing: 0.25px;
+  }
+
+  &[data-variant="breadcrumbs"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.5px;
+  }
+
+  &[data-variant="title-children"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 27px;
+  }
+
+  &[data-variant="text-tableBody"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 24.5px;
+    letter-spacing: 0.5px;
+  }
+
+  &[data-variant="title-page"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 36px;
+  }
+
+  &[data-variant="title-header-navbar"] {
+    font-family: "Noto Sans JP", sans-serif;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}
