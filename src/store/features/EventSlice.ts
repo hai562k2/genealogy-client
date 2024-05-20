@@ -2,11 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../axios/axiosClient";
 import { FormAddEvent, FormInviteMember } from "../../utils/typeForm";
 import { loading, unLoading } from "./spinSlice";
+import { TItemMember, TItemMemberById } from "./memberSlice";
 
 export type TItemEvent = {
   id: number;
   clanId: number;
   content: string;
+  title: string;
   name: string;
   image: string[];
   timeEvent: Date | null;
@@ -34,8 +36,10 @@ type TEventById = {
 export type TItemEventById = {
   id: number;
   content: string;
+  title: string;
   name: string;
   image: string[];
+  user: TItemMember;
   timeEvent: Date | null;
   comments: TItemEventComment[];
 };
@@ -44,10 +48,32 @@ const initialStateById: TEventById = {
   data: {
     id: 0,
     content: "",
+    title: "",
     name: "",
     image: [],
     timeEvent: new Date("2024-01-10T09:15:13.759Z"),
     comments: [],
+    user: {
+      id: 0,
+      email: "",
+      name: "",
+      image: [],
+      gender: "",
+      birthday: new Date("2020-01-01"),
+      lunarBirthday: new Date("2020-01-01"),
+      country: "",
+      phone: "",
+      job: "",
+      workAddress: "",
+      fatherId: 0,
+      fatherName: "",
+      motherId: 0,
+      motherName: "",
+      partnerId: [],
+      description: "",
+      deadDay: new Date("2020-01-01"),
+      lunarDeadDay: new Date("2020-01-01"),
+    },
   },
 };
 
@@ -63,6 +89,7 @@ export type TItemEventComment = {
   eventId: number;
   createdAt: Date;
   content: string;
+  user: TItemMember;
   image: string[];
 };
 

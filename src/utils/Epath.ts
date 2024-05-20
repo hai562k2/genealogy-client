@@ -15,4 +15,5 @@ export const Epath = {
   NOT_FOUND_EVENT: "/event",
   NOT_FOUND_FAMILY_TREE: "/family-tree",
   EVENT: "/event/:clanId",
+  EVENT_DETAIL: "/event/:clanId/event-detail/:eventId",
 };

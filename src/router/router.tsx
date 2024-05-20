@@ -15,6 +15,7 @@ import NotFoundEvent from "../pages/NotFound/notFoundEvent";
 import NotFoundGenealogy from "../pages/NotFound/notFoundGenealogy";
 import NOtFoundFamilyTree from "../pages/NotFound/notFoundFamilyTree";
 import EventFamily from "../pages/event-family";
+import EventDetailFamily from "../pages/event-family/EventDetail";
 
 const RootRouter = () => {
   const isLoading = useAppSelector((state) => state.spinSlice.value);
@@ -77,6 +78,10 @@ const RootRouter = () => {
         {
           path: Epath.EVENT,
           element: <EventFamily />,
+        },
+        {
+          path: Epath.EVENT_DETAIL,
+          element: <EventDetailFamily />,
         },
       ],
     },

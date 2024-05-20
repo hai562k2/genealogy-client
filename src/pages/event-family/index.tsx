@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEventByClanAsync } from "../../store/features/EventSlice";
 import DefaultText from "../../components/Text/DefaultText";
 import { nanoid } from "nanoid";
+import { Card } from "antd";
+import Meta from "antd/es/card/Meta";
 
 const EventFamily = () => {
   const { clanId } = useParams();
@@ -43,13 +45,37 @@ const EventFamily = () => {
 
   return (
     <div>
-      <ul className="list group mb-4">
+      {/* <ul className="list group mb-4">
         {events.map((event) => (
           <li key={event.id} className="list-groups-item">
             {event.content}
           </li>
         ))}
-      </ul>
+      </ul> */}
+      <div className="flex gap-4 p-5">
+        {events.map((event) => (
+          <Card
+            hoverable
+            style={{ width: "33.33%", height: "auto", objectFit: "cover" }}
+            cover={
+              <img
+                alt={event.title}
+                src={event.image[0]}
+                className="h-[300px] object-cover"
+              />
+            }
+            onClick={() =>
+              navigate(`/event/${clanId}/event-detail/${event.id}`)
+            }
+          >
+            <div className="">
+              <h3>{event.title}</h3>
+              <p className="line-clamp-3">{event.content}</p>
+              <p>{event.timeEvent?.toString()}</p>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
