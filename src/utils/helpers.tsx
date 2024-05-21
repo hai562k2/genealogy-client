@@ -19,3 +19,9 @@ export const uploadApiManagement = {
     });
   },
 };
+
+export function convertDateTime(date: Date) {
+  const inputDate = new Date(date);
+  const localDate = inputDate.toLocaleDateString();
+  return localDate;
+}

@@ -4,14 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getEventByClanAsync } from "../../store/features/EventSlice";
 import DefaultText from "../../components/Text/DefaultText";
 import { nanoid } from "nanoid";
-import { Card } from "antd";
+import { Card, Pagination, PaginationProps } from "antd";
 import Meta from "antd/es/card/Meta";
+import { convertDateTime } from "../../utils/helpers";
+import errImg from "../../assets/images/logo.png";
 
 const EventFamily = () => {
   const { clanId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const events = useAppSelector((state) => state.EventSlice.data.items);
+  const events = useAppSelector((state) => state.EventSlice.data);
   const event = useAppSelector((state) => state.EventByIdReducer.data);
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +28,10 @@ const EventFamily = () => {
     ],
     []
   );
+
+  const onChange: PaginationProps["onChange"] = (page) => {
+    setCurrentPage(page);
+  };
 
   const loadData = () => {
     dispatch(
@@ -45,37 +51,31 @@ const EventFamily = () => {
 
   return (
     <div>
-      {/* <ul className="list group mb-4">
-        {events.map((event) => (
-          <li key={event.id} className="list-groups-item">
-            {event.content}
-          </li>
-        ))}
-      </ul> */}
-      <div className="flex gap-4 p-5">
-        {events.map((event) => (
-          <Card
-            hoverable
-            style={{ width: "33.33%", height: "auto", objectFit: "cover" }}
-            cover={
-              <img
-                alt={event.title}
-                src={event.image[0]}
-                className="h-[300px] object-cover"
-              />
-            }
-            onClick={() =>
-              navigate(`/event/${clanId}/event-detail/${event.id}`)
-            }
-          >
-            <div className="">
-              <h3>{event.title}</h3>
-              <p className="line-clamp-3">{event.content}</p>
-              <p>{event.timeEvent?.toString()}</p>
-            </div>
-          </Card>
-        ))}
-      </div>
+      {events.items.map((event) => (
+        <div
+          className="flex gap-4 items-center cursor-pointer hover:opacity-80"
+          onClick={() => navigate(`/event/${clanId}/event-detail/${event.id}`)}
+        >
+          <img
+            alt={event.title}
+            src={event.image[0] || errImg}
+            className="h-[150px] object-cover"
+          />
+          <div className="flex flex-col">
+            <h3 className="line-clamp-1">{event.title}</h3>
+            <p className="line-clamp-2 mt-3">{event.content}</p>
+            <p className="mt-4 text-xs text-[#ccc]">
+              {convertDateTime(event.timeEvent as Date)}
+            </p>
+          </div>
+        </div>
+      ))}
+      <Pagination
+        current={currentPage}
+        onChange={onChange}
+        total={events.total}
+        defaultPageSize={pageSize}
+      />
     </div>
   );
 };

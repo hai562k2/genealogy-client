@@ -41,4 +41,9 @@ export type FormAddEvent = {
   image?: string[];
 };
 
+export type FormAddEventComment = {
+  eventId: number;
+  content: string;
+};
+
 export type FormUpdateUser = {};

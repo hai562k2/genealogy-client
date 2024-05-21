@@ -107,7 +107,7 @@ const ClanInformation = () => {
     >
       <img
         className="w-[200px] h-[200px] mt-5 p-1 rounded-full"
-        src={clan.image[0]}
+        src={clan.image[0] || noImage}
         alt="Bordered avatar"
       />
       <h1

@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "../../axios/axiosClient";
-import { FormAddEvent, FormInviteMember } from "../../utils/typeForm";
+import {
+  FormAddEvent,
+  FormAddEventComment,
+  FormInviteMember,
+} from "../../utils/typeForm";
 import { loading, unLoading } from "./spinSlice";
 import { TItemMember, TItemMemberById } from "./memberSlice";
 
@@ -160,9 +164,22 @@ const eventByIdSlice = createSlice({
 export const createEvent = createAsyncThunk(
   "event/create",
   async (params: FormAddEvent, thunkApi) => {
-    thunkApi.dispatch(loading());
     try {
       const respone = await axiosClient.post("/event", params);
+      thunkApi.dispatch(unLoading());
+      return respone.data;
+    } catch (error: any) {
+      thunkApi.dispatch(unLoading());
+      return thunkApi.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const createEventComment = createAsyncThunk(
+  "event-commnet/create",
+  async (params: FormAddEventComment, thunkApi) => {
+    try {
+      const respone = await axiosClient.post("/event/comment", params);
       thunkApi.dispatch(unLoading());
       return respone.data;
     } catch (error: any) {
