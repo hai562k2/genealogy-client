@@ -12,11 +12,19 @@ import TextArea from "antd/es/input/TextArea";
 import { FormEditCan } from "../../utils/typeForm";
 import { uploadApiManagement } from "../../utils/helpers";
 import noImage from "../../assets/images/logo.png";
+import { getRoleMemberAsync } from "../../store/features/memberSlice";
 
 const ClanInformation = () => {
   const { clanId } = useParams();
   const dispatch = useAppDispatch();
   const clan = useAppSelector((state) => state.clanByIdReducer.data);
+  const roleMember = useAppSelector(
+    (state) => state.RoleMemberByIdReducer.data
+  );
+
+  useEffect(() => {
+    dispatch(getRoleMemberAsync(Number(clanId)));
+  }, [clanId]);
 
   useEffect(() => {
     dispatch(getClanByIdAsync(Number(clanId)));
@@ -128,7 +136,7 @@ const ClanInformation = () => {
           fontSize: "1rem",
         }}
       />
-      <div>
+      <div className={`${roleMember.roleCd === 2 ? "hidden" : ""}`}>
         <FloatButton
           icon={<EditOutlined style={{ fontSize: "1.2rem" }} />}
           type="primary"

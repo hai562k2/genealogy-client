@@ -26,6 +26,7 @@ import TextArea from "antd/es/input/TextArea";
 import noImage from "../../assets/images/logo.png";
 import { FormAddEvent } from "../../utils/typeForm";
 import moment from "moment";
+import { getRoleMemberAsync } from "../../store/features/memberSlice";
 
 const EventFamily = () => {
   const { clanId } = useParams();
@@ -38,6 +39,9 @@ const EventFamily = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [form] = Form.useForm();
+  const roleMember = useAppSelector(
+    (state) => state.RoleMemberByIdReducer.data
+  );
 
   const [loadingButton, setLoadingButton] = useState<boolean>(false);
 
@@ -138,6 +142,10 @@ const EventFamily = () => {
     loadData();
   }, [clanId, currentPage, pageSize, searchKeyword]);
 
+  useEffect(() => {
+    dispatch(getRoleMemberAsync(Number(clanId)));
+  }, [clanId]);
+
   return (
     <div>
       <div>
@@ -169,7 +177,7 @@ const EventFamily = () => {
           defaultPageSize={pageSize}
         />
       </div>
-      <div>
+      <div className={`${roleMember.roleCd === 2 ? "hidden" : ""}`}>
         <FloatButton
           icon={<PlusOutlined style={{ fontSize: "1.2rem" }} />}
           type="primary"
