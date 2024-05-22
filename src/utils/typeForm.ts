@@ -36,8 +36,9 @@ export type FormInviteMember = {
 
 export type FormAddEvent = {
   clanId: number;
+  title: string;
   content: string;
-  timeEvent: Date;
+  timeEvent: string;
   image?: string[];
 };
 
