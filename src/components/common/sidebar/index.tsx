@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppSelector } from "../../../store/hook";
+import { faCalendarAlt } from "@fortawesome/free-regular-svg-icons";
 
 const Sidebar = ({
   small,
@@ -86,7 +87,7 @@ const Sidebar = ({
       key: "clanEvent",
       link: handleLinkEvent(),
       label: "Sự kiện",
-      icon: faUser,
+      icon: faCalendarAlt,
     },
   ];
 

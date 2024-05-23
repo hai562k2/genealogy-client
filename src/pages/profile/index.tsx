@@ -149,9 +149,9 @@ const Profile = () => {
               rules={[{ required: true, message: "Vui lòng nhập tên" }]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <Input />
+              <Input style={{ padding: "10px", fontSize: "16px" }} />
             </Form.Item>
             <Form.Item
               label="Email"
@@ -159,64 +159,64 @@ const Profile = () => {
               rules={[{ required: true, message: "Vui lòng nhập email" }]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <Input />
+              <Input style={{ padding: "10px", fontSize: "16px" }} />
             </Form.Item>
             <Form.Item
               label="Giới tính"
               name="gender"
-              rules={[{}]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
               <Radio.Group onChange={handleGender} value={gender}>
-                <Radio value={"male"}>Nam</Radio>
+                <Radio value={"male"} style={{ marginRight: "20px" }}>
+                  Nam
+                </Radio>
                 <Radio value={"female"}>Nữ</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
               label="Ngày sinh"
               name="lunarBirthday"
-              rules={[{ required: false }]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <DatePicker format="YYYY/MM/DD" />
+              <DatePicker
+                format="YYYY/MM/DD"
+                style={{ width: "100%", padding: "10px", fontSize: "16px" }}
+              />
             </Form.Item>
             <Form.Item
               label="Quốc tịch"
               name="country"
-              rules={[{}]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <Input />
+              <Input style={{ padding: "10px", fontSize: "16px" }} />
             </Form.Item>
             <Form.Item
               label="Số điện thoại"
               name="phone"
-              rules={[{}]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <Input />
+              <Input style={{ padding: "10px", fontSize: "16px" }} />
             </Form.Item>
             <Form.Item
               label="Nghề nghiệp"
               name="job"
-              rules={[{}]}
               labelCol={{ span: 24 }}
               wrapperCol={{ span: 24 }}
-              style={{ color: "#333333", marginBottom: "20px" }}
+              style={{ color: "#333333", marginBottom: "20px", width: "100%" }}
             >
-              <Input />
+              <Input style={{ padding: "10px", fontSize: "16px" }} />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ width: "100%" }}>
               <Button type="primary" htmlType="submit">
                 Sửa
               </Button>

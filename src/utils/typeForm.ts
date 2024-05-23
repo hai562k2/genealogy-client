@@ -42,6 +42,13 @@ export type FormAddEvent = {
   image?: string[];
 };
 
+export type FormUpdateEvent = {
+  title?: string;
+  content?: string;
+  timeEvent: string;
+  image?: string[];
+};
+
 export type FormAddEventComment = {
   eventId: number;
   content: string;

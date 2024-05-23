@@ -29,9 +29,11 @@ import {
 } from "antd";
 import { MdDelete, MdOutlineEdit } from "react-icons/md";
 import {
+  CloseCircleOutlined,
   DownOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { FormInviteMember } from "../../utils/typeForm";
 import { updateUserAsync } from "../../store/features/authSlice";
@@ -406,6 +408,10 @@ const Member = () => {
     );
   };
 
+  const clearSearch = () => {
+    setSearchKeyword("");
+  };
+
   const handleGender = (e: RadioChangeEvent) => {
     setGender(e.target.value);
   };
@@ -416,15 +422,67 @@ const Member = () => {
 
   return (
     <div>
-      <Input
-        placeholder="Search by name"
-        value={searchKeyword}
-        onChange={(e) => setSearchKeyword(e.target.value)} // Cập nhật state khi người dùng nhập vào ô tìm kiếm
-        style={{ width: 200, marginBottom: 16 }}
-      />
-      <Button type="primary" onClick={handleSearch}>
-        Search
-      </Button>{" "}
+      <div
+        className="relative flex items-center gap-2"
+        style={{ marginBottom: "16px" }}
+      >
+        <div style={{ position: "relative", width: "200px" }}>
+          <Input
+            placeholder="Tìm kiếm theo tên"
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "8px 32px 8px 32px",
+              borderRadius: "4px",
+              fontSize: "14px",
+            }}
+          />
+          <span
+            style={{
+              position: "absolute",
+              top: "50%",
+              left: "8px",
+              transform: "translateY(-50%)",
+              pointerEvents: "none",
+              fontSize: "16px",
+              color: "#ccc",
+            }}
+          >
+            <SearchOutlined />
+          </span>
+          {searchKeyword && (
+            <span
+              style={{
+                position: "absolute",
+                top: "50%",
+                right: "8px",
+                transform: "translateY(-50%)",
+                cursor: "pointer",
+                fontSize: "16px",
+                color: "#ccc",
+              }}
+              onClick={clearSearch}
+            >
+              <CloseCircleOutlined />
+            </span>
+          )}
+        </div>
+        <Button
+          type="primary"
+          onClick={handleSearch}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "8px 16px",
+            fontSize: "14px",
+            height: "100%", // Đảm bảo nút có chiều cao bằng với ô nhập liệu
+          }}
+        >
+          Tìm
+        </Button>
+      </div>
       {/* Nút để kích hoạt việc tìm kiếm */}
       <Table
         dataSource={members.items}

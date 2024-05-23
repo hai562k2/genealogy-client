@@ -223,10 +223,9 @@ const eventCommentSlice = createSlice({
   },
 });
 
-export const updateClanAsync = createAsyncThunk(
-  "clan/update",
+export const updateEventAsync = createAsyncThunk(
+  "event/update",
   async ({ params, id }: { params: TItemEditEvent; id: number }, thunkApi) => {
-    thunkApi.dispatch(loading());
     try {
       const respone = await axiosClient.patch(`/event/${id}`, params);
       thunkApi.dispatch(unLoading());
