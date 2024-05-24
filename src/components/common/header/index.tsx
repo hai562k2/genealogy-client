@@ -153,7 +153,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
         {clans.map((clan) => (
           <div
             key={clan.id}
-            className="px-4 py-2 hover:bg-gray-100 transition-colors duration-300 cursor-pointer"
+            className="px-4 py-2 hover:bg-gray-100 transition-colors duration-300 cursor-pointer font-semibold"
             onClick={() => handleNavigate(clan.id)}
           >
             {clan.name}
@@ -166,6 +166,7 @@ const Header = ({ onClick }: { onClick: () => void }) => {
           boxShadow: "none",
           padding: 0,
           backgroundColor: "transparent",
+          fontWeight: "600",
         }}
         icon={<PlusOutlined style={{ fontSize: "16px" }} />}
         onClick={handleAddClick}
@@ -192,7 +193,10 @@ const Header = ({ onClick }: { onClick: () => void }) => {
             rules={[{ required: true, message: "Vui lòng nhập tên dòng họ" }]}
             labelCol={{ span: 24 }} // Đặt labelCol span thành 24 để label chiếm toàn bộ width
             wrapperCol={{ span: 24 }} // Đặt wrapperCol span thành 24 để input chiếm toàn bộ width
-            style={{ color: "#333333", marginBottom: "20px" }} // Thêm margin bottom để tách các Form.Item
+            style={{
+              color: "#333333",
+              marginBottom: "20px",
+            }} // Thêm margin bottom để tách các Form.Itemfont-semibold
           >
             <Input />
           </Form.Item>

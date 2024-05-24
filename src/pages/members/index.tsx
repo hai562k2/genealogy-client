@@ -51,7 +51,7 @@ const Member = () => {
   const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalElements, setTotalElements] = useState(0);
-  const [searchKeyword, setSearchKeyword] = useState(""); // State để lưu từ khóa tìm kiếm
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [parentList, setParentList] = useState<{ name: string; id: number }[]>(
     []
   );
@@ -79,7 +79,7 @@ const Member = () => {
 
   useEffect(() => {
     dispatch(getAllMemberByClanAsync(Number(clanId)));
-  }, [clanId]);
+  }, [clanId, members]);
 
   useEffect(() => {
     dispatch(getRoleMemberAsync(Number(clanId)));
@@ -203,10 +203,20 @@ const Member = () => {
       gender: values.gender,
       roleCd: values.roleCd,
     };
+    if (params.motherId === undefined) {
+      delete params.motherId;
+    }
+    if (params.fatherId === undefined) {
+      delete params.fatherId;
+    }
+    console.log(params);
     if (!isUpdate) {
       try {
         await dispatch(inviteMember({ params, id: Number(clanId) })).unwrap();
         form.resetFields();
+        setFatherId(undefined);
+        setMotherId(undefined);
+        setPartnerId(undefined);
         loadData();
         setModalVisible(false);
       } catch (error: any) {
@@ -241,6 +251,9 @@ const Member = () => {
           })
         );
         loadData();
+        setFatherId(undefined);
+        setMotherId(undefined);
+        setPartnerId(undefined);
         setModalVisible(false);
       } catch (error: any) {
         if (error.message === "EA0004") {
@@ -351,11 +364,15 @@ const Member = () => {
       dataIndex: "id",
       render: (record: any) => {
         return (
-          <div className={`${roleMember.roleCd === 2 ? "hidden" : ""}`}>
+          <div
+            className={`${roleMember.roleCd === 2 ? "hidden" : ""} flex gap-1`}
+          >
             <Button
               style={{
+                display: "flex",
+                alignItems: "center",
                 marginRight: "0.5rem",
-                padding: "0.25rem",
+                padding: "10px 12px",
                 borderRadius: "0.375rem",
                 backgroundColor: "#007bff",
                 color: "#fff",
@@ -374,8 +391,10 @@ const Member = () => {
             >
               <Button
                 style={{
+                  display: "flex",
+                  alignItems: "center",
                   marginRight: "0.5rem",
-                  padding: "0.25rem",
+                  padding: "10px 12px",
                   borderRadius: "0.375rem",
                   backgroundColor: "#dc2626",
                   color: "#fff",
@@ -426,7 +445,14 @@ const Member = () => {
         className="relative flex items-center gap-2"
         style={{ marginBottom: "16px" }}
       >
-        <div style={{ position: "relative", width: "200px" }}>
+        <div
+          style={{
+            position: "relative",
+            width: "200px",
+            marginLeft: "10px",
+            marginTop: "10px",
+          }}
+        >
           <Input
             placeholder="Tìm kiếm theo tên"
             value={searchKeyword}
@@ -468,20 +494,6 @@ const Member = () => {
             </span>
           )}
         </div>
-        <Button
-          type="primary"
-          onClick={handleSearch}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "8px 16px",
-            fontSize: "14px",
-            height: "100%", // Đảm bảo nút có chiều cao bằng với ô nhập liệu
-          }}
-        >
-          Tìm
-        </Button>
       </div>
       {/* Nút để kích hoạt việc tìm kiếm */}
       <Table
