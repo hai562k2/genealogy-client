@@ -74,6 +74,7 @@ export default class MyFamilyTree extends Component<Props> {
       // }
 
       // Render the family tree with updated nodes
+      FamilyTree.SEARCH_PLACEHOLDER = "Tìm kiếm theo tên";
       this.family = new FamilyTree(this.divRef.current, {
         nodes: this.props.nodes,
         template: "hugo",

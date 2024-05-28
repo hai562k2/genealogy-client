@@ -95,12 +95,12 @@ const Sidebar = ({
     callBack && callBack(small ? "DEFAULT_SIZE" : "SMALL_SIZE");
 
   return (
-    <div className="w-full h-screen bg-sidebar text-white">
+    <div className="w-full h-screen bg-white text-[#1D1C16]">
       <div className="flex items-center justify-center box-border h-[52px]">
         <img alt="logo" src={logo} width={36} height={36} />
       </div>
       <div
-        className="box-border"
+        className="box-border p-2"
         style={{ height: "calc(100vh - 52px)", overflow: "hidden" }}
       >
         {items.map((item) => (
@@ -110,8 +110,8 @@ const Sidebar = ({
               to={item.link}
               className={({ isActive }) =>
                 isActive
-                  ? "text-white font-semibold bg-active-link"
-                  : "text-no-active hover:bg-active-link hover:text-white hover:font-semibold"
+                  ? "text-[#1D1C16] font-semibold bg-[#ffe600] hover:text-[#1D1C16]"
+                  : "text-[#1D1C16] hover:bg-[#ebebeb] hover:text-[#1D1C16]"
               }
               style={{
                 height: "36px",
@@ -119,6 +119,7 @@ const Sidebar = ({
                 display: "flex",
                 alignItems: "center",
                 boxSizing: "border-box",
+                borderRadius: "8px",
               }}
             >
               <div

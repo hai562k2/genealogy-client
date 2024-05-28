@@ -18,6 +18,11 @@ export type UserData = {
   job?: string;
 };
 
+export type UserData1 = {
+  name?: string;
+  gender?: string;
+};
+
 const initialState: TypeLoginSlice = {
   entity: null,
   error: null,

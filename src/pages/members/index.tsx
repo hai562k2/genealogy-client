@@ -77,6 +77,8 @@ const Member = () => {
 
   const [formSubmitCounter, setFormSubmitCounter] = useState(0);
 
+  const [userImage, setUserImage] = useState<any>([]);
+
   useEffect(() => {
     dispatch(getAllMemberByClanAsync(Number(clanId)));
   }, [clanId, members]);
@@ -159,6 +161,7 @@ const Member = () => {
       setMotherName(member.__members__.motherName?.toString() || "");
       form.setFieldValue("gender", member.__members__.gender || "");
       form.setFieldValue("roleCd", member.roleCd);
+      setUserImage(member.__members__.image);
     }
   }, [member, form, members]);
 
@@ -209,7 +212,7 @@ const Member = () => {
     if (params.fatherId === undefined) {
       delete params.fatherId;
     }
-    console.log(params);
+
     if (!isUpdate) {
       try {
         await dispatch(inviteMember({ params, id: Number(clanId) })).unwrap();
@@ -242,7 +245,12 @@ const Member = () => {
       }
     } else {
       try {
-        await dispatch(updateUserAsync({ id: userEditId, data: params }));
+        await dispatch(
+          updateUserAsync({
+            id: userEditId,
+            data: { ...params, image: userImage },
+          })
+        );
         await dispatch(
           updateMemberProfileAsync({
             clanId: Number(clanId),
